@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		
+<mapper namespace="ics.qst.mapper.BoardMapper">
+
+	<insert id="addBoard" parameterType="ics.qst.vo.Board">
+		INSERT INTO board
+		(
+			title
+		,	comment
+		,	writer
+		,	history
+		,	cdt
+		,	mdt
+		)
+		VALUES
+		(
+		 	#{title}
+		,	#{comment}
+		,	#{writer}
+		,	'N'
+		,	NOW()
+		,	NOW()
+		)
+	</insert>
+
+	<select id="getBoardList" resultType="ics.qst.vo.Board">
+		SELECT
+		    idx
+		,	title
+		,	comment
+		,	writer
+		,	history
+		,	cdt
+		,	mdt
+		FROM board
+		ORDER BY idx DESC
+	</select>
+
+	<select id="getBoardDetail" parameterType="int" resultType="ics.qst.vo.Board">
+	<![CDATA[
+		SELECT
+			idx
+		,	(SELECT MIN(idx) FROM board WHERE idx > #{value}) AS nextIdx
+		,	(SELECT MAX(idx) FROM board WHERE idx < #{value}) AS prevIdx
+		,	(SELECT title FROM board WHERE idx = (SELECT MIN(idx) FROM board WHERE idx > #{value})) AS nextTitle
+		,	(SELECT title FROM board WHERE idx = (SELECT MAX(idx) FROM board WHERE idx < #{value})) AS prevTitle
+		,	title
+		,	comment
+		,	writer
+		,	history
+		,	cdt
+		,	mdt
+		FROM board
+		WHERE idx = #{value}
+	]]>
+	</select>
+
+	<update id="modifyBoard" parameterType="ics.qst.vo.Board">
+		UPDATE board SET
+			title = #{title}
+		,	comment = #{comment}
+		,	writer = #{writer}
+		,	history = 'Y'
+		,	mdt = NOW()
+		WHERE idx = #{idx}
+	</update>
+
+</mapper>

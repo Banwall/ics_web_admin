@@ -1,0 +1,50 @@
+@import 'variables', 'mixin';
+
+#user {
+  display: grid;
+  grid-template-columns: 355px 673px 673px;
+  grid-template-rows: 810px;
+  gap: 10px;
+  &.member {
+    grid-template-columns: 456px 622px 622px;
+  }
+}
+
+.card {
+  h3 {
+    padding: $ms;
+    font-weight: $bold;
+    font-size: $fn;
+    margin-bottom: $ms;
+  }
+  .flex-between {
+    margin-bottom: $ms;
+    h3 {
+      margin-bottom: 0;
+    }
+    .select {
+      width: 133px;
+    }
+  }
+}
+
+.member {
+  .card {
+    > .member-info {
+      padding: 10px;
+      input {
+        width: 201px;
+      }
+    }
+    .list-container {
+      height: 673px;
+      position: relative;
+      > ul {
+        height: 590px;
+      }
+      .pagination {
+        bottom: 30px;
+      }
+    }
+  }
+}

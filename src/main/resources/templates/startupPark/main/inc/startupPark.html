@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+	<th:block th:replace="fragments/meta :: metaFragment(title='ICT-Main', useMetaCsrf='true')"></th:block>
+	<th:block th:replace="fragments/style :: styleFragment"></th:block>
+	<link rel="stylesheet" href="/resources/publish/css/main.css">
+</head>
+
+<body>
+	<th:block th:replace="fragments/loding :: loadingFragment"></th:block>
+	<th:block th:replace="fragments/header-manager :: headerFragmentManager(menu='main')"></th:block>
+	<th:block th:replace="manager/main/inc/incheonAirport :: incheonAirport"></th:block>
+	
+	<div class="wrap" id="startupPark">
+		<div class="mapDiv" id="map" style="width: 1700px; height: 750px;"></div>
+	</div>
+	
+	<article class="modal" id="smartModal">
+		<div class="modal-wrap" style="width: 600px;">
+			<div class="modal-head">
+				<h2>마커 정보</h2>
+				<span class="close">
+					<img src="/resources/publish/images/close.svg" alt="">
+				</span>
+			</div>
+			<div class="modal-body">
+				<div class="sensor-data" id="smartModalData">
+					<table>
+						<tr>
+							<th>회전형 카메라 ID</th>
+							<td class="rotate"></td>
+						</tr>
+						<tr>
+							<th>고정형 카메라 ID</th>
+							<td class="fix"></td>
+						</tr>
+						<tr>
+							<th></th>
+							<td></td>
+						</tr>
+						<tr>
+							<th></th>
+							<td></td>
+						</tr>
+						<tr>
+							<th></th>
+							<td></td>
+						</tr>
+						<tr class="green">
+							<th></th>
+							<td></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</article>
+	
+	<th:block th:replace="fragments/footer-manager :: footerFragmentManager"></th:block>
+</body>
+	
+	<th:block th:replace="fragments/script :: scriptFragment('true')"></th:block>
+	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=50477847074171e5fb7b30db4c6ebe1b"></script>
+	<script th:src="@{/resources/ics/manager/js/startupParkMap.js}"></script>
+	<script type="text/JavaScript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script type="text/JavaScript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <!--<script src="https://jsmpeg.com/jsmpeg.min.js"></script>-->
+    <script th:src="@{/resources/ics/common/js/string.js}"></script>
+	
+	<script th:inline="javascript">
+		$(function() {
+			$(".startupPark").css("background-color", "rgba(255,192,0, 1)");
+			$(".incheon").css("background-color", "rgba(255,255,255, 0.15)");
+			$(".incheonAirport").css("background-color", "rgba(255,255,255, 0.15)");
+			$(".header-nav").hide();
+			$(".manager").hide();
+			$(".member").hide();
+			
+			$(".close").on("click", function() {
+				$("#smartModal").removeClass("active")
+			})
+		})
+	</script>
+</th:block>
+</html>

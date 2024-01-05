@@ -1,0 +1,85 @@
+@import 'variables';
+
+@font-face {
+  font-family: 'NanumSquareOTF';
+  src: url('#{$root}fonts/NanumSquareOTF_acL.otf');
+  /* 가는글씨체 웹폰트주소 지정*/
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: 'NanumSquareOTF';
+  src: url('#{$root}fonts/NanumSquareOTF_acR.otf');
+  /* 가는글씨체 웹폰트주소 지정*/
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'NanumSquareOTF';
+  src: url('#{$root}fonts/NanumSquareOTF_acB.otf');
+  /* 가는글씨체 웹폰트주소 지정*/
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: 'NanumSquareOTF';
+  src: url('#{$root}fonts/NanumSquareOTF_acEB.otf');
+  /* 가는글씨체 웹폰트주소 지정*/
+  font-weight: 800;
+}
+
+@font-face {
+  font-family: 'NotoSansCJKkr';
+  src: url('#{$root}fonts/NotoSansCJKkr-Thin.otf');
+  /* 가는글씨체 웹폰트주소 지정*/
+  font-weight: 100;
+}
+
+@font-face {
+  font-family: 'NotoSansCJKkr';
+  src: url('#{$root}fonts/NotoSansCJKkr-DemiLight.otf');
+  /* 가는글씨체 웹폰트주소 지정*/
+  font-weight: 200;
+}
+
+@font-face {
+  font-family: 'NotoSansCJKkr';
+  src: url('#{$root}fonts/NotoSansCJKkr-Light.otf');
+  /* 가는글씨체 웹폰트주소 지정*/
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: 'NotoSansCJKkr';
+  src: url('#{$root}fonts/NotoSansCJKkr-Regular.otf');
+  /* 가는글씨체 웹폰트주소 지정*/
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'NotoSansCJKkr';
+  src: url('#{$root}fonts/NotoSansCJKkr-Medium.otf');
+  /* 가는글씨체 웹폰트주소 지정*/
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'NotoSansCJKkr';
+  src: url('#{$root}fonts/NotoSansCJKkr-DemiBold.otf');
+  /* 가는글씨체 웹폰트주소 지정*/
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: 'NotoSansCJKkr';
+  src: url('#{$root}fonts/NotoSansCJKkr-Bold.otf');
+  /* 가는글씨체 웹폰트주소 지정*/
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: 'NotoSansCJKkr';
+  src: url('#{$root}fonts/NotoSansCJKkr-Black.otf');
+  /* 가는글씨체 웹폰트주소 지정*/
+  font-weight: 900;
+}

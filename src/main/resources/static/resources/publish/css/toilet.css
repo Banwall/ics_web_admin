@@ -1,0 +1,155 @@
+.toilet-icon {
+  position: absolute;
+}
+
+.toilet-icon.t1-1, .toilet-icon.t1-2, .toilet-icon.t1-3, .toilet-icon.t5-1, .toilet-icon.t5-2 {
+  width: 45px;
+  height: 26px;
+}
+
+.toilet-icon.t1-1.use-N, .toilet-icon.t1-2.use-N, .toilet-icon.t1-3.use-N, .toilet-icon.t5-1.use-N, .toilet-icon.t5-2.use-N {
+  background: url("/resources/publish/images/empty-h.png") left center no-repeat;
+  background-size: contain;
+}
+
+.toilet-icon.t1-1.use-Y, .toilet-icon.t1-2.use-Y, .toilet-icon.t1-3.use-Y, .toilet-icon.t5-1.use-Y, .toilet-icon.t5-2.use-Y {
+  background: url("/resources/publish/images/use-h.png") left center no-repeat;
+  background-size: contain;
+}
+
+.toilet-icon.t1-1.use-E, .toilet-icon.t1-2.use-E, .toilet-icon.t1-3.use-E, .toilet-icon.t5-1.use-E, .toilet-icon.t5-2.use-E {
+  background: url("/resources/publish/images/alert-h.png") left center no-repeat;
+  background-size: contain;
+}
+
+.toilet-icon.t2-1, .toilet-icon.t2-2, .toilet-icon.t2-3, .toilet-icon.t2-4, .toilet-icon.t2-5, .toilet-icon.t3-1, .toilet-icon.t3-2, .toilet-icon.t3-3, .toilet-icon.t3-4, .toilet-icon.t3-5, .toilet-icon.t4-1 {
+  width: 26px;
+  height: 45px;
+}
+
+.toilet-icon.t2-1.use-N, .toilet-icon.t2-2.use-N, .toilet-icon.t2-3.use-N, .toilet-icon.t2-4.use-N, .toilet-icon.t2-5.use-N, .toilet-icon.t3-1.use-N, .toilet-icon.t3-2.use-N, .toilet-icon.t3-3.use-N, .toilet-icon.t3-4.use-N, .toilet-icon.t3-5.use-N, .toilet-icon.t4-1.use-N {
+  background: url("/resources/publish/images/empty-v.png") left center no-repeat;
+  background-size: contain;
+}
+
+.toilet-icon.t2-1.use-Y, .toilet-icon.t2-2.use-Y, .toilet-icon.t2-3.use-Y, .toilet-icon.t2-4.use-Y, .toilet-icon.t2-5.use-Y, .toilet-icon.t3-1.use-Y, .toilet-icon.t3-2.use-Y, .toilet-icon.t3-3.use-Y, .toilet-icon.t3-4.use-Y, .toilet-icon.t3-5.use-Y, .toilet-icon.t4-1.use-Y {
+  background: url("/resources/publish/images/use-v.png") left center no-repeat;
+  background-size: contain;
+}
+
+.toilet-icon.t2-1.use-E, .toilet-icon.t2-2.use-E, .toilet-icon.t2-3.use-E, .toilet-icon.t2-4.use-E, .toilet-icon.t2-5.use-E, .toilet-icon.t3-1.use-E, .toilet-icon.t3-2.use-E, .toilet-icon.t3-3.use-E, .toilet-icon.t3-4.use-E, .toilet-icon.t3-5.use-E, .toilet-icon.t4-1.use-E {
+  background: url("/resources/publish/images/alert-v.png") left center no-repeat;
+  background-size: contain;
+}
+
+.toilet-icon.t1-1 {
+  right: 1.5%;
+  top: 22.8%;
+}
+
+.toilet-icon.t1-2 {
+  right: 1.5%;
+  top: 31.4%;
+}
+
+.toilet-icon.t1-3 {
+  right: 1.5%;
+  top: 39.8%;
+}
+
+.toilet-icon.t2-5 {
+  right: 1.1%;
+  top: 58%;
+}
+
+.toilet-icon.t2-4 {
+  right: 7.6%;
+  top: 58%;
+}
+
+.toilet-icon.t2-3 {
+  right: 14%;
+  top: 58%;
+}
+
+.toilet-icon.t2-2 {
+  right: 20.5%;
+  top: 58%;
+}
+
+.toilet-icon.t2-1 {
+  right: 27%;
+  top: 58%;
+}
+
+.toilet-icon.t3-4 {
+  right: 7.4%;
+  top: 83%;
+}
+
+.toilet-icon.t3-3 {
+  right: 13.9%;
+  top: 83%;
+}
+
+.toilet-icon.t3-2 {
+  right: 20.4%;
+  top: 83%;
+}
+
+.toilet-icon.t3-1 {
+  right: 26.8%;
+  top: 83%;
+}
+
+.toilet-icon.t4-1 {
+  right: 61.8%;
+  top: 35%;
+}
+
+.toilet-icon.t5-1 {
+  right: 49%;
+  top: 32.8%;
+}
+
+.toilet-icon.t5-2 {
+  right: 49%;
+  top: 41.5%;
+}
+
+.toilet-icon.t6-1{
+  left: 55%;
+  top: 9.5%;
+  width:60px;
+  height:60px;
+}
+.toilet-icon.t6-1.use-E{
+  background: url("/resources/publish/images/alert-m.png") center center no-repeat;
+  background-size: contain;
+}
+.toilet-icon.t6-1.use-Y{
+  background: url("/resources/publish/images/use-m.png") center center no-repeat;
+  background-size: contain;
+}
+.toilet-icon.t6-1.use-N{
+  background: url("/resources/publish/images/empty-m.png") center center no-repeat;
+  background-size: contain;
+}
+.toilet-icon.t7-1{
+  left: 39%;
+  top: 65%;
+  width:55px;
+  height:60px;
+}
+.toilet-icon.t7-1.use-E{
+  background: url("/resources/publish/images/alert-w.png") center center no-repeat;
+  background-size: contain;
+}
+.toilet-icon.t7-1.use-Y{
+ background: url("/resources/publish/images/use-w.png") center center no-repeat;
+  background-size: contain;
+}
+.toilet-icon.t7-1.use-N{
+  background: url("/resources/publish/images/empty-w.png") center center no-repeat;
+  background-size: contain;
+}

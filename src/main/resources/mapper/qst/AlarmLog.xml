@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		
+<mapper namespace="ics.qst.mapper.AlarmLogMapper">
+
+	<select id="getAlarmLogList" resultType="ics.qst.vo.AlarmLog">
+	/* getAlarmLogList 쿼리 시작 */
+		SELECT * FROM alarm_log
+		WHERE CDT BETWEEN #{startDate} and #{endDate}
+			AND ALARM_FLAG = 0
+		<if test="code != null and code != ''">
+			AND CODE = #{code}
+		</if>
+		ORDER BY ALARM_IDX DESC;
+	</select>
+	
+	<select id="getCodeNmList" resultType="ics.qst.vo.AlarmLog">
+	/* getCodeNmList 쿼리 시작 */
+		SELECT CODE, CODE_NM FROM device_list
+	</select>
+	
+	<insert id="addAgentAlarm">
+	/* addAgentAlarm 쿼리 시작 */
+		INSERT INTO alarm_log
+		(
+			ALARM_IDX
+		,	CODE
+		,	CODE_NM
+		,	STATUS
+		,	ALARM_FLAG
+		,	CDT
+		)
+		VALUES
+		(
+			nextval(incheon_maintenance.sq_alarm_log)
+		,	'9999'
+		,	'에이전트'
+		,	'에이전트 프로세스 종료'
+		,	'0'
+		,	NOW()
+		)
+	</insert>
+	
+	<update id="updateAlarmFlag" parameterType="String">
+	/* updateAlarmFlag 쿼리 시작 */
+		UPDATE alarm_log SET
+			ALARM_FLAG = '1'
+		WHERE ALARM_IDX = #{value}
+	</update>
+</mapper>

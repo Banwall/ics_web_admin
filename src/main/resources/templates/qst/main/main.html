@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+	<!--<th:block th:replace="/qst/layout/style :: styleFragment"></th:block>-->
+	<th:block th:replace="fragments/meta :: metaFragment(title='ICT-Main', useMetaCsrf='true')"></th:block>
+	<th:block th:replace="fragments/style :: styleFragment"></th:block>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
+
+	<link rel="stylesheet" href="/resources/publish/css/main.css">
+	<link rel="stylesheet" href="/qst/css/lib/grid/mermaid.min.css">
+	<link rel="stylesheet" href="/qst/css/app/main/popup.css">
+	<link rel="stylesheet" href="/qst/css/app/main/main.css">
+</head>
+<body style="background-color: #eeeeee">
+	<th:block th:replace="qst/main/inc/deviceLog.html :: deviceLog"></th:block>
+	<th:block th:replace="fragments/header-manager :: headerFragmentManager(menu='main')"></th:block>
+	<th:block th:replace="manager/main/inc/incheonAirport :: incheonAirport"></th:block>
+	<th:block th:replace="manager/main/inc/busShelter :: busShelter"></th:block>
+	<main class="qstDiv" style="padding-bottom: 0px !important;">
+		<div id="cardDiv">
+			<div class="wrap mt20" id="server">
+				<div class="card" style="width: 1680px; height: 210px; display: flex;">
+					<div class="allBtnDiv">
+						<div>
+							<select id="installationSelect">
+								<option th:each="list : ${installationList}" th:value="${list}" th:text="${list}" th:selected="${list} == ${installationValue}"></option>
+							</select>
+							<button id="deviceListBtn"><a th:href="@{/qst/device/deviceList}">디바이스 관리</a></button>
+							<button id="reportBoardBtn"><a th:href="@{/qst/board/reportBoardList}">정기 점검 보고서</a></button>
+						</div>
+						<button type="button" class="allBtn getServer" data-toggle="modal" data-target="#myModal">전체보기</button>
+					</div>
+					<div class="serverDiv" th:each="usage, i : ${serverUsageList}" th:data-code="${usage.code}" onclick="getTypeServer(this)">
+						<span th:text="${usage.codeNm}" style="font-size: 12px; font-weight: bold;"></span>
+
+						<div class="pgDiv">
+							<span>CPU : </span>
+							<div class="progress">
+								<div class="custom-progress-bar" th:id="cpuBar + ${i.index}" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+									 th:style="${usage.cpu < 0 ? 'width : 0%' : 'width : ' + usage.cpu + '%'}">
+									<span class="usageText" th:id="cpuSpan + ${i.index}" th:data-cpu="${usage.cpu}"
+										  th:text="${usage.cpu < 0} ? 'SNMP Not Setted' : ${usage.cpu} + '%'"></span>
+								</div>
+							</div>
+						</div>
+						<div class="pgDiv">
+							<span>RAM : </span>
+							<div class="progress">
+								<div class="custom-progress-bar" th:id="ramBar + ${i.index}" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+									 th:style="${usage.cpu < 0 ? 'width : 0%' : 'width : ' + usage.ramPersent + '%'}">
+									<span class="usageText" th:id="ramSpan + ${i.index}" th:text="${usage.ram}" th:data-ram="${usage.ramPersent}"></span>
+								</div>
+							</div>
+						</div>
+						<div class="pgDiv">
+							<span>HDD : </span>
+
+							<div class="progress">
+								<div class="custom-progress-bar" th:id="hddBar + ${i.index}" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+									 th:style="${usage.cpu < 0 ? 'width : 0%' : 'width : ' + usage.hddPersent + '%'}">
+									<span class="usageText" th:id="hddSpan + ${i.index}" th:text="${usage.hdd}" th:data-hdd="${usage.hddPersent}"></span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="wrap" id="device" style="display: flex; flex-wrap: wrap;">
+				<div style="display: flex; flex-wrap: wrap;">
+					<div class="cardDiv" th:each="list : ${grpNmList}">
+						<div class="flex" style="height: 20px;">
+							<div class="deviceName">
+								<span class="deviceNameSpan" th:text="${list.grpNm}"></span>
+							</div>
+							<div class="totalSpanDiv">
+								<span class="totalSpan" th:id="${list.grpNm}+Span"></span>
+							</div>
+						</div>
+						<div style="overflow-y: scroll; height: calc(100% - 15px);">
+							<div class="deviceListDiv" th:each="device : ${deviceList}" th:if="${list.grpNm == device.grpNm}" th:title="${device.deviceSpot}">
+								<div style="width: 140px;">
+									<span th:text="${device.codeNm}"></span>
+								</div>
+								<div class="ipValueDiv">
+									<span>192.168.</span>
+									<span class="ipSpan" th:text="${#strings.substring(device.ip, 8)}"></span>
+									<span th:class="${device.value == 'Y' ? 'greenCircle' : 'redCircle'}"></span>
+									<input type="hidden" id="valueSpan" th:value="${device.value}">
+								</div>
+							</div>
+						</div>
+						<!-- 차트 DIV 삭제하지 말 것 -->
+						<!--<div>
+							<canvas class="ml20" th:id="${list.grpNm}+Chart" style="width: 500px; height: 240px;"></canvas>
+						</div>-->
+					</div>
+					<!-- 차트 관련 삭제하지 말 것 -->
+					<!--<th:block th:each="list : ${dataList}">
+						<input type="hidden" class="hiddenCnt" id="sucCnt" th:value="${list.sucCnt}">
+						<input type="hidden" class="hiddenCnt" id="failCnt" th:value="${list.failCnt}">
+					</th:block>-->
+				</div>
+			</div>
+		</div>
+	</main>
+</body>
+<th:block th:replace="fragments/script :: scriptFragment('true')"></th:block>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+<script type="text/JavaScript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script type="text/JavaScript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="/qst/js/lib/grid/gridjs.development.js"></script>
+<script type="text/javascript" src="/qst/js/app/main/main.js"></script>
+<script type="text/javascript" src="/qst/js/app/main/chart.js"></script>
+<script type="text/javascript" src="/qst/js/app/main/grid.js"></script>
+
+<script th:inline="javascript">
+
+	let grpNmCtxList = [];
+	let grpNmList = [];
+	let dataList = [];
+	let percentList = [];
+
+	$(document).ready(function() {
+		// 차트 함수 getChartData();
+		init();
+	})
+
+	window.onload = function() {
+
+	}
+
+	/**   차트 함수     *******************************************************************************************/
+	/*function getChartData() {
+		grpNmCtxList = [];
+		grpNmList = [];
+		dataList = [];
+		let j = 0;
+
+		$(".deviceNameSpan").each(function() {
+			grpNmList.push( $(this).text() );
+		})
+		$(".hiddenCnt").each(function() {
+			dataList.push( $(this).val() );
+		})
+		//let grpNmList = $("#grpNmList").toArray().val();
+		//let dataList = $("#dataList").toArray().val();
+		let legendList = ['정상', '비정상'];
+
+		for(let i=0; i<grpNmList.length; i++) {
+			grpNmCtxList.push(grpNmList[i] + "Ctx");
+			percentList.push( Number(Number(dataList[j]) / (Number(dataList[j]) + Number(dataList[j+1]))) * 100 )
+			grpNmCtxList[i] = document.getElementById(grpNmList[i] + "Chart");
+			$("#" + grpNmList[i] + "Span").text("Total : " + Number(Number(dataList[j]) + Number(dataList[j+1])))
+			drawChart(grpNmCtxList[i], dataList[j], dataList[j+1], legendList);
+			j += 2;
+		}
+	}*/
+</script>
+</html>

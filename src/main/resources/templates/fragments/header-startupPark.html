@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+</head>
+<th:block th:fragment="headerFragmentStartupPark(menu)">
+	<th:block th:replace="fragments/loding :: loadingFragment"></th:block>
+	<header>
+		<div class="wrap">
+			<h1>
+				<!--<img src="/resources/publish/images/logo.png" alt="">-->
+				<img src="/resources/publish/images/logo.png" alt="">
+			</h1>
+
+			<div class="flex" style="width: 912px;">
+				<div class="managerTitle startupPark" style="background-color: rgba(255,192,0, 1)">
+					<p>스타트업파크</p>
+				</div>
+				<div class="managerTitle incheon">
+					<p>인천대입구역</p>
+				</div>
+				<div class="managerTitle incheonAirport">
+					<p>인천국제공항</p>
+				</div>
+				<div class="managerTitle busShelter">
+					<p>버스쉘터</p>
+				</div>
+			</div>
+
+			<div class="managerTitle incheonMaintenance">
+				<a style="color: #ffffff">네트워크 상태</a>
+			</div>
+
+			<div class="managerTitle" style="margin-right: 30px;">
+				<a style="color: #ffffff" href="http://221.154.134.35">플랫폼 바로가기</a>
+			</div>
+
+			<div class="managerUser">
+				<div>
+					<a th:href="@{/manager/mypage/info}"><span id="myCompanyName">[[${#authentication.principal.companyName}]]</span> ㅣ<span id="myName">[[${#authentication.principal.name}]]</span></a>
+				</div>
+				<form method="POST" th:action="@{/logout}">
+					<button class="custom light-blue">Logout</button>
+				</form>
+			</div>
+		</div>
+	</header>
+	<nav class="wrap flex-between header-nav">
+		<ul class="nav">
+			<li class="test" th:classappend="${menu=='main'}? active">
+				<a class="test" th:href='@{/startupPark/main}'>대시보드</a>
+			</li>
+			<li th:classappend="${menu=='user'}? active">
+				<a th:href="@{/startupPark/user}">회원사 관리</a>
+			</li>
+			<li th:classappend="${menu=='sensorList'}? active">
+				<a th:href="@{/startupPark/sensor/list}">센서 관리</a>
+			</li>
+			<li th:classappend="${menu=='sensorData'}? active">
+				<a th:href="@{/startupPark/sensor/data}">데이터 검색</a>
+			</li>
+			<li th:classappend="${menu=='cctv'}? active">
+				<a th:href='@{/startupPark/cctv}'>CCTV</a>
+			</li>
+		</ul>
+	</nav>
+	
+	<script type="text/JavaScript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script type="text/JavaScript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+	
+	<script th:inline="javascript">
+		$(function() {
+			$(".managerTitle").on("click", function() {
+				if( $(this).hasClass("startupPark") ) {
+ 					$(".startupPark").css("background-color", "rgba(255,192,0, 1)");
+ 					$(".incheon").css("background-color", "rgba(255,255,255, 0.15)");
+ 					$(".incheonAirport").css("background-color", "rgba(255,255,255, 0.15)");
+ 					$(".incheonMaintenance").css("background-color", "rgba(255,255,255, 0.15)");
+ 					$(".busShelter").css("background-color", "rgba(255,255,255, 0.15)");
+ 					$(".header-nav").hide();
+ 					$(".manager").hide();
+ 					$(".member").hide();
+ 					$("#sensordata").hide();
+ 					$("#sensorList").hide();
+ 					$("#cctv").hide();
+ 					$("#startupPark").show();
+ 					$("#incheonAirport").hide();
+ 					$("#incheonMaintenance").hide();
+ 					$("#busShelter").hide();
+ 					location.href = "/startupPark/main"
+				} else if( $(this).hasClass("incheon") ) {
+ 					location.href = "/manager/main"
+				} else if( $(this).hasClass("incheonAirport") ) {
+					$(".startupPark").css("background-color", "rgba(255,255,255, 0.15)");
+ 					$(".incheon").css("background-color", "rgba(255,255,255, 0.15)");
+ 					$(".incheonAirport").css("background-color", "rgba(255,192,0, 1)");
+ 					$(".incheonMaintenance").css("background-color", "rgba(255,255,255, 0.15)");
+ 					$(".busShelter").css("background-color", "rgba(255,255,255, 0.15)");
+ 					$(".header-nav").hide();
+ 					$(".manager").hide();
+ 					$(".member").hide();
+ 					$(".qstDiv").hide();
+ 					$("#sensordata").hide();
+ 					$("#sensorList").hide();
+ 					$("#cctv").hide();
+ 					$("#startupPark").hide();
+ 					$("#incheonAirport").show();
+ 					$("#busShelter").hide();
+				} else if( $(this).hasClass("busShelter") ) {
+					$(".startupPark").css("background-color", "rgba(255,255,255, 0.15)");
+ 					$(".incheon").css("background-color", "rgba(255,255,255, 0.15)");
+ 					$(".incheonAirport").css("background-color", "rgba(255,255,255, 0.15)");
+ 					$(".incheonMaintenance").css("background-color", "rgba(255,255,255, 0.15)");
+ 					$(".busShelter").css("background-color", "rgba(255,192,0, 1)");
+ 					$(".header-nav").hide();
+ 					$(".manager").hide();
+ 					$(".member").hide();
+ 					$(".qstDiv").hide();
+ 					$("#sensordata").hide();
+ 					$("#sensorList").hide();
+ 					$("#cctv").hide();
+ 					$("#startupPark").hide();
+ 					$("#incheonAirport").hide();
+ 					$("#busShelter").show();
+				}
+			});
+			
+			$(".incheonMaintenance").on("click", function() {
+				$(".startupPark").css("background-color", "rgba(255,255,255, 0.15)");
+				$(".incheon").css("background-color", "rgba(255,255,255, 0.15)");
+				$(".incheonAirport").css("background-color", "rgba(255,255,255, 0.15)");
+				$(".incheonMaintenance").css("background-color", "rgba(255,192,0, 1)");
+				$(".busShelter").css("background-color", "rgba(255,255,255, 0.15)");
+				$(".header-nav").hide();
+				$(".manager").hide();
+				$(".member").hide();
+				$("#sensordata").hide();
+				$("#startupPark").hide();
+				$("#incheonAirport").hide();
+				$("#busShelter").hide();
+				location.href = "/qst/main"
+			})
+		})
+	</script>
+</th:block>
+</html>

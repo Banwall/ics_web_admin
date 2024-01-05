@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+	<th:block th:replace="fragments/meta :: metaFragment(title='ICT-Main', useMetaCsrf='true')"></th:block>
+	<th:block th:replace="fragments/style :: styleFragment"></th:block>
+	<link rel="stylesheet" href="/resources/publish/css/main.css">
+	<link rel="stylesheet" href="/resources/publish/css/toilet.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-notify@0.5.4/dist/simple-notify.min.css" />
+</head>
+<body>
+	<th:block th:replace="fragments/header-operator :: headerFragmentOperator(menu='main')"></th:block>
+	<main>
+		<div class="home wrap operator">
+			<div class="card today">
+				<h3>TODAY
+					<span class='mainToday'>-</span></h3>
+				<ul class="today-data">
+					<li>
+						<h5>센서</h5>
+						<p class='mainSensorCount'>-</p>
+					</li>
+					<li>
+						<h5>알람발생</h5>
+						<p class="mainAlarmLogCount"></p>
+					</li>
+					<li>
+						<h5>등록알람</h5>
+						<p class="mainAlarmCount"></p>
+					</li>
+				</ul>
+			</div>
+			<div class="card sensor-take">
+				<h3>센서정보 수신 상태</h3>
+				<div class="flex-between">
+					<div class="chart">
+						<canvas width="110" height="128" id="hourData"></canvas>
+						<span id="hourPercent">-</span>
+					</div>
+					<div class="chart">
+						<canvas width="110" height="128" id="dayData"></canvas>
+						<span id="dayPercent">-</span>
+					</div>
+				</div>
+			</div>
+			<div class="card alert">
+				<h3>경고 현황</h3>
+				<ul class="text-list" id="sensorWarnLog">
+					<!--<li>임계치 초과 (현재 값 : 17408/ 임계치 : 4000)</li>
+					<li>1층 ㅣ 5편성 ㅣ VOBC ㅣ MFDS120</li>-->
+				</ul>
+			</div>
+			<div class="card sensing">
+				<div class="flex-between">
+					<h3>실시간 센싱 현황</h3>
+					<div class="select">
+						<input id="sensingInput" type="text" class="custom" value="" readonly="readonly">
+						<ul class="select-dropdown">
+							<!--<li>함체1</li>-->
+							<th:block th:each="list : ${enclosureList}">
+								<li th:data-enclosure-idx="${list.enclosureIdx}" th:data-enclosure-location="${list.enclosureLocation}" class='sensingLi'>[[${list.enclosureName}]]</li>
+							</th:block> 							
+						</ul>
+					</div>
+				</div>
+				<div class="chart">
+					<canvas id="sensingChart" width="275" height="150"></canvas>
+				</div>
+			</div>
+			<div class="card maps">
+				<div class="flex-between mb-10">
+					<div class="select">
+						<input type="text" class="custom" value="지하 1층" readonly="readonly">
+						<ul class="select-dropdown">
+							<li data-floor="0">지하 1층</li>
+							<li data-floor="1">지하 2층</li>
+						</ul>
+					</div>
+					<ul class="category">
+						<li class="flex" id="sensorCate">
+							<div class="sensor-icon mr-5">
+								<span>
+								</span>
+							</div>
+							스마트 함체
+						</li>
+						<li class="flex" id="fireCate">
+							<div class="fire-icon mr-5">
+								<span></span>
+							</div>
+							화재 감지기
+						</li>
+						<li class="flex" id="apCate">
+							<div class="ap-icon mr-5">
+								<span></span>
+							</div>
+							무선 AP
+						</li>
+					</ul>
+				</div>
+				<div class="map-img"></div>
+			</div>
+			<div class="card smartInfo">
+				<div class="flex-between">
+					<h3>스마트 함체 정보</h3>
+					<div class="select">
+						<input id="smartInfoInput" type="text" class="custom" value="" readonly="readonly">
+						<ul class="select-dropdown">
+							<th:block th:each="list : ${enclosureList}">
+								<li th:data-enclosure-idx="${list.enclosureIdx}" th:data-enclosure-location="${list.enclosureLocation}" class='smartInfoLi'>[[${list.enclosureName}]]</li>
+							</th:block> 
+						<!--	<li>함체1</li>
+							<li>함체2</li>
+							<li>함체3</li>
+							<li>함체4</li>-->
+						</ul>
+					</div>
+				</div>
+				<h4 id="smartInfoTitle">함체1</h4>
+				<ul id="smartInfoSensorList" class="info-list">
+					<!--<li class="temp">
+						<img src="/resources/publish/images/temp.png" alt="">
+						<p>내부 온도: 10.5° ㅣ 외부 온도: 10.5°</p>
+					</li>
+					<li class="humi">
+						<img src="/resources/publish/images/humi.png" alt="">
+						<p>내부 습도: 99.9% ㅣ 외부 습도: 99.9%</p>
+					</li>
+					<li class="dust">
+						<img src="/resources/publish/images/dust.png" alt="">
+						<p>미세먼지: 100 ㎍/m³</p>
+					</li>
+					<li>
+						<p>왼쪽 문: 열림 ㅣ 오른쪽 문: 닫힘</p>
+					</li>
+					<li>
+						<p>이산화탄소: 90,000 ppm</p>
+					</li>
+					<li>
+						<p>소음: 100 dB</p>
+					</li>
+					<li>
+						<p>조도: 100 Lux</p>
+					</li>
+					<li>
+						<p>진동: 100 mm/sec</p>
+					</li>-->
+				</ul>
+			</div>
+			<div class="card charts operator">
+				<div>
+					<h3>화장실 안내</h3>
+					<div class="chart">
+                            <ul class="toilet-category">
+                                <li>
+                                    <p>비었음</p>
+                                    <span class="toilet-empty">1</span>
+                                </li>
+                                <li>
+                                    <p>사용중</p>
+                                    <span class="toilet-use">1</span>
+                                </li>
+                                <li>
+                                    <p>비상</p>
+                                    <span class="toilet-alert">1</span>
+                                </li>
+                            </ul>
+                            <div class="toilet-img" id="toiletImg">
+                                <!-- <div class="toilet-icon t1-1 use-E"></div>
+                                <div class="toilet-icon t1-2 use-E"></div>
+                                <div class="toilet-icon t1-3 use-Y"></div>
+                                <div class="toilet-icon t2-1 use-N"></div>
+                                <div class="toilet-icon t2-2 use-N"></div>
+                                <div class="toilet-icon t2-3 use-N"></div>
+                                <div class="toilet-icon t2-4 use-N"></div>
+                                <div class="toilet-icon t2-5 use-N"></div>
+                                <div class="toilet-icon t3-1 use-Y"></div>
+                                <div class="toilet-icon t3-2 use-N"></div>
+                                <div class="toilet-icon t3-3 use-Y"></div>
+                                <div class="toilet-icon t3-4 use-E"></div>
+                                <div class="toilet-icon t4-1 use-N"></div>
+                                <div class="toilet-icon t5-1 use-Y"></div>
+                                <div class="toilet-icon t5-2 use-N"></div> -->
+                            </div>
+                        </div>
+				</div>
+				<div>
+					<h3 id="subwayModalBtn" style="cursor: pointer;">실시간 지하철 운행 정보</h3>
+					<div class="chart">
+                       <div class="subway">
+                       		<iframe src="http://211.210.158.230/RailContents"  width="1024" height="1024" frameborder="0"></iframe>
+                       </div>
+                    </div>
+				</div>
+				<div>
+					<h3>로그 1일</h3>
+					<!--<h3></h3>--><!--센싱 실시간 로그 데이터 + 분전반 상태 로그 -->
+					<ul class="text-list" id="sensorLog">
+						<!--<li class="error">2021-12-13 (20:21) ㅣ 센서1 ㅣ 온도 23.5°(경고)</li>
+						<li>2021-12-13 (20:21) ㅣ 센서1 ㅣ 온도 23.5°</li>
+						<li>2021-12-13 (20:21) ㅣ 센서1 ㅣ 온도 23.5°</li>
+						<li>2021-12-13 (20:21) ㅣ 센서1 ㅣ 온도 23.5°</li>
+						<li>2021-12-13 (20:21) ㅣ 센서1 ㅣ 온도 23.5°</li>
+						<li>2021-12-13 (20:21) ㅣ 센서1 ㅣ 온도 23.5°</li>
+						<li>2021-12-13 (20:21) ㅣ 센서1 ㅣ 온도 23.5°</li>
+						<li>2021-12-13 (20:21) ㅣ 센서1 ㅣ 온도 23.5°</li>
+						<li>2021-12-13 (20:21) ㅣ 센서1 ㅣ 온도 23.5°</li>-->
+					</ul>
+				</div>
+			</div>
+			<div class="card log">
+				<h3>분전반 상태 정보</h3>
+				<ul id="fireLog" class="text-list">
+					<!--<li class="error">2021-12-13 (20:21) ㅣ 센서1 ㅣ 온도 23.5°(경고)</li>
+					<li>2021-12-13 (20:21) ㅣ 센서1 ㅣ 온도 23.5°</li>
+					<li>2021-12-13 (20:21) ㅣ 센서1 ㅣ 온도 23.5°</li>
+					<li>2021-12-13 (20:21) ㅣ 센서1 ㅣ 온도 23.5°</li>-->
+				</ul>
+			</div>
+			<div class="card cctv">
+				<h3>실시간 CCTV</h3>
+				<div class="none">
+					<canvas class="jsmpeg"></canvas>
+				</div>
+				<div class="none">
+					<canvas class="jsmpeg"></canvas>
+				</div>
+			</div>
+		</div>
+	</main>
+	<article class="modal" id="smartModal">
+		<div class="modal-wrap">
+			<div class="modal-head">
+				<h2>스마트 함체 정보</h2>
+				<span class="close">
+					<img src="/resources/publish/images/close.svg" alt="">
+				</span>
+			</div>
+			<div class="modal-body">
+				<ul id="smartModalUl" class="tabs mb-20">
+					<!--<li class="active">내부 온도</li>
+					<li>외부 온도</li>
+					<li>내부 습도</li>
+					<li>외부 습도</li>
+					<li>미세 먼지</li>
+					<li>왼쪽 문</li>
+					<li>오른쪽 문</li>
+					<li>이산화탄소</li>
+					<li>소음</li>
+					<li>조도</li>
+					<li>진동</li>-->
+				</ul>
+				<div id="smartModalData" class="sensor-data">
+					<!--<table>
+						<tr>
+							<th>승인 일자</th>
+							<td>2022-02-07 (14:58)</td>
+						</tr>
+						<tr>
+							<th>센서 아이디</th>
+							<td>00002ca7804606d1</td>
+						</tr>
+						<tr>
+							<th>승인 종류</th>
+							<td>함체 내부 온도</td>
+						</tr>
+						<tr>
+							<th>회원사</th>
+							<td>인천교통공사</td>
+						</tr>
+						<tr>
+							<th>설치 위치</th>
+							<td>인천대입구역</td>
+						</tr>
+						<tr>
+							<th>승인 요청 시간</th>
+							<td>2022-02-07 (14:58)</td>
+						</tr>
+						<tr class="green">
+							<th>승인 시간</th>
+							<td>2022-02-07 (14:58)</td>
+						</tr>
+					</table>-->
+				</div>
+			</div>
+		</div>
+	</article>
+	<article class="modal" id="fireModal">
+		<div class="modal-wrap">
+			<div class="modal-head">
+				<h2>화재 감지기 정보</h2>
+				<span class="close">
+					<img src="/resources/publish/images/close.svg" alt="">
+				</span>
+			</div>
+			<div class="modal-body">
+				<div class="sensor-data" id="fireModalData">
+					<!--<table>
+						<tr>
+							<th>승인 일자</th>
+							<td>2022-02-07 (14:58)</td>
+						</tr>
+						<tr>
+							<th>센서 아이디</th>
+							<td>00002ca7804606d1</td>
+						</tr>
+						<tr>
+							<th>승인 종류</th>
+							<td>함체 내부 온도</td>
+						</tr>
+						<tr>
+							<th>회원사</th>
+							<td>인천교통공사</td>
+						</tr>
+						<tr>
+							<th>설치 위치</th>
+							<td>인천대입구역</td>
+						</tr>
+						<tr>
+							<th>승인 요청 시간</th>
+							<td>2022-02-07 (14:58)</td>
+						</tr>
+						<tr class="green">
+							<th>승인 시간</th>
+							<td>2022-02-07 (14:58)</td>
+						</tr>
+					</table>-->
+				</div>
+			</div>
+		</div>
+	</article>
+
+	<article class="modal" id="apModal">
+		<div class="modal-wrap">
+			<div class="modal-head">
+				<h2>무선 AP 정보</h2>
+				<span class="close">
+					<img src="/resources/publish/images/close.svg" alt="">
+				</span>
+			</div>
+			<div class="modal-body">
+				<div class="sensor-data" id="apModalData">
+					<!--<table>
+						<tr>
+							<th>승인 일자</th>
+							<td>2022-02-07 (14:58)</td>
+						</tr>
+						<tr>
+							<th>센서 아이디</th>
+							<td>00002ca7804606d1</td>
+						</tr>
+						<tr>
+							<th>승인 종류</th>
+							<td>함체 내부 온도</td>
+						</tr>
+						<tr>
+							<th>회원사</th>
+							<td>인천교통공사</td>
+						</tr>
+						<tr>
+							<th>설치 위치</th>
+							<td>인천대입구역</td>
+						</tr>
+						<tr>
+							<th>승인 요청 시간</th>
+							<td>2022-02-07 (14:58)</td>
+						</tr>
+						<tr class="green">
+							<th>승인 시간</th>
+							<td>2022-02-07 (14:58)</td>
+						</tr>
+					</table>-->
+				</div>
+			</div>
+		</div>
+	</article>
+
+	<article class="modal" id="subwayModal">
+            <div class="modal-wrap">
+                <div class="modal-head">
+                    <h2>실시간 지하철 운행 정보</h2>
+                    <span class="close">
+                        <img src="/resources/publish/images/close.svg" alt="">
+                    </span>
+                </div>
+                <div class="modal-body">
+                    <div class="iframe-wrap">
+                        <iframe src="http://211.210.158.230/RailContents"  width="1440" height="1000" frameborder="0"></iframe>
+                    </div>
+                </div>
+            </div>
+    </article>
+	<th:block th:replace="fragments/footer-operator :: footerFragmentOperator"></th:block>
+	
+	<input type="hidden" name="companyIdx" th:value="${#authentication.principal.companyIdx}">
+</body>
+	<script>
+			//카테고리 클릭
+			const sensorCate = document.querySelector('#sensorCate')
+			const fireCate = document.querySelector('#fireCate')
+
+			sensorCate.addEventListener('click', blinkSensor)
+			fireCate.addEventListener('click', blinkFire)
+
+			function blinkSensor() {
+				const map = document.querySelector('.map-img')
+				const sensorIcon = map.querySelectorAll('.sensor-icon');
+				const fireIcon = map.querySelectorAll('.fire-icon')
+				sensorIcon.forEach((item) => {
+					item.classList.toggle('active')
+				})
+				fireIcon.forEach((item) => {
+					item.classList.remove('active')
+				})
+			}
+			function blinkFire() {
+				const map = document.querySelector('.map-img')
+				const sensorIcon = map.querySelectorAll('.sensor-icon');
+				const fireIcon = map.querySelectorAll('.fire-icon')
+				sensorIcon.forEach((item) => {
+					item.classList.remove('active')
+				})
+				fireIcon.forEach((item) => {
+					item.classList.toggle('active')
+				})
+			}
+
+			// 실시간 지하철 모달
+
+			const subwayModal = document.getElementById('subwayModal')
+			const subwayModalBtn = document.querySelector('#subwayModalBtn')
+			modal(subwayModal)
+			makeModalBtn(subwayModal, subwayModalBtn)
+
+
+			function modal(index) {
+				const closeBtn = index.querySelector('.close')
+				closeBtn.addEventListener('click', function () {
+					console.log(1)
+					index.classList.remove('active')
+				})
+			}
+			function makeModalBtn(index, btn) {
+				btn.addEventListener('click', function () {
+					index.classList.add('active');
+				})
+			}
+
+	</script>
+
+
+	<th:block th:replace="fragments/script :: scriptFragment('true')"></th:block>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-notify@0.5.4/dist/simple-notify.min.js"></script>
+    <script src="https://jsmpeg.com/jsmpeg.min.js"></script>
+    <script th:src="@{/resources/ics/common/js/string.js}"></script>
+    <script th:src="@{/resources/ics/operator/js/operatorMain.js}"></script>
+    <!--<script th:src="@{/resources/ics/common/js/sensorLogAlarm.js}"></script>-->
+    
+</html>

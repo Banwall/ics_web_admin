@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		
+<mapper namespace="ics.qst.mapper.DeviceMapper">
+
+	<select id="getInstallationList" resultType="String">
+		SELECT
+			installation
+		FROM device_list
+		GROUP BY installation
+	</select>
+
+	<select id="getGrpNmList" parameterType="String" resultType="ics.qst.vo.DeviceList">
+		SELECT
+			grp_nm AS grpNm
+		,	grp_cd AS grpCd
+		FROM device_list
+		<if test='value != null and value != ""'>
+			WHERE installation = #{value}
+		</if>
+		GROUP BY GRP_CD
+	</select>
+
+	<select id="getDeviceList" resultType="ics.qst.vo.DeviceList">
+		SELECT
+			dl.grp_nm AS grpNm
+		,	dl.code_nm AS codeNm
+		,	ip
+		,	ds.value
+		,	dl.device_spot AS deviceSpot
+		FROM device_list dl
+		INNER JOIN device_status ds
+			ON dl.code = ds.code
+		WHERE installation = #{value} AND use_yn = 'Y'
+	</select>
+
+	<select id="getDeviceGrpCdList" resultType="ics.qst.vo.DeviceList">
+	/* getDeviceGrpCdList 쿼리 시작 */
+		SELECT DISTINCT(GRP_CD) FROM device_list WHERE GRP_NM NOT IN ('서버')
+	</select>
+	
+	<select id="getChartData" parameterType="String" resultType="ics.qst.vo.DeviceList">
+	/* getChartData 쿼리 시작 */
+		SELECT
+			CASE VALUE WHEN 'Y' THEN 1 ELSE 0 END AS VALUE
+		,	CODE
+		,	MDT
+		FROM device_status_log
+		<if test="code != null and code != ''">
+			WHERE CODE = #{value}
+		</if>
+		ORDER BY MDT DESC
+		LIMIT 5
+	</select>
+	
+	<select id="getDeviceGrpNmList" resultType="ics.qst.vo.DeviceList">
+	/* grpNmList 쿼리 시작 */
+		SELECT DISTINCT GRP_NM, GRP_CD FROM device_list
+	</select>
+	
+	<select id="setCdSelect" resultType="ics.qst.vo.DeviceList">
+	/* grpNmList 쿼리 시작 */
+		SELECT CODE, CODE_NM FROM device_list
+		WHERE GRP_CD = #{value}
+	</select>
+
+	<delete id="deleteDeviceStatus" parameterType="String">
+	/* deleteDeviceStatus 쿼리 시작 */
+		DELETE FROM device_status WHERE CODE = #{value}
+	</delete>
+	
+	<delete id="deleteDeviceList" parameterType="String">
+	/* deleteDeviceList 쿼리 시작 */
+		DELETE FROM device_list WHERE CODE = #{value}
+	</delete>
+	
+	<select id="getServerUsage" parameterType="String" resultType="ics.qst.vo.DeviceList">
+	/* getServerUsage 쿼리 시작 */
+		SELECT
+			DS.CODE
+		,	(SELECT CODE_NM FROM device_list DL WHERE DL.code = DS.CODE AND DL.GRP_NM = '서버') AS codeNm
+		,	CPU
+		,	RAM
+		,	SUBSTRING_INDEX ( RAM ,  '%' , 1 ) AS ramPersent
+		,	HDD
+		,	SUBSTRING_INDEX ( HDD ,  '%' , 1 ) AS hddPersent
+		FROM device_status DS
+		INNER JOIN device_list DL
+			ON DS.CODE = DL.CODE
+		WHERE installation = #{value}
+		    AND DL.GRP_NM = '서버'
+			AND DL.USE_YN = 'Y'
+	</select>
+	
+	<select id="getDevice" resultType="ics.qst.vo.DeviceList">
+	/* getDevice 쿼리 시작 */
+		SELECT
+			DSL.IDX
+		,	DL.CODE_NM AS codeNm
+		,	DSL.CODE
+		,	DSL.VALUE
+		,	DSL.MDT
+		,	DL.DEVICE_SPOT AS deviceSpot
+		FROM device_status_log DSL
+		INNER JOIN device_list DL
+			ON DL.CODE = DSL.CODE
+		WHERE ( DSL.CODE IN (SELECT DSL.CODE FROM device_list WHERE GRP_NM = '함체')
+			OR DSL.CODE IN (SELECT DSL.CODE FROM device_list WHERE GRP_NM = '화장실') 
+			OR DSL.CODE IN (SELECT DSL.CODE FROM device_list WHERE GRP_NM = '전류분석기') )
+			AND DSL.MDT >= DATE_ADD(NOW(), INTERVAL -1 HOUR)
+			<if test="grpCd != null and grpCd != '' ">
+				AND DL.GRP_CD = #{grpCd}
+			</if>
+			<if test="code != null and code != '' ">
+				AND DL.CODE = #{code}
+			</if>
+			<if test="flag == 'sensor'">
+				AND DL.GRP_CD NOT IN ('1001')
+			</if>
+			<if test="flag == 'server'">
+				AND DL.GRP_CD IN ('1001')
+			</if>
+		ORDER BY DSL.MDT DESC
+	</select>
+
+	<select id="getDataList" parameterType="String" resultType="ics.qst.vo.DeviceList">
+		SELECT
+			DL.grp_nm AS grpNm
+			 ,	COUNT(CASE WHEN VALUE="Y" then 1 END) AS sucCnt
+			 ,	COUNT(CASE WHEN VALUE="N" THEN 1 END) AS failCnt
+		FROM device_status DS
+		INNER JOIN device_list DL
+			ON DS.CODE = DL.CODE
+		WHERE DL.installation = #{value}
+		GROUP BY DL.grp_nm
+	</select>
+
+	<select id="getAllGrpNmList" resultType="ics.qst.vo.DeviceList">
+		SELECT
+		    grp_nm AS grpNm
+		,	grp_cd AS grpCd
+		FROM device_list
+		GROUP BY grp_nm
+	</select>
+
+	<insert id="addDevice" parameterType="ics.qst.vo.DeviceList">
+		INSERT INTO device_list
+		(
+			code
+		,	installation
+		,	code_nm
+		,	grp_cd
+		,	grp_nm
+		,	ip
+		,	use_yn
+		,	device_spot
+		)
+		VALUES
+		(
+			#{code}
+		,	#{installation}
+		,	#{codeNm}
+		,	#{grpCd}
+		,	#{grpNm}
+		,	#{ip}
+		,	'Y'
+		,	#{deviceSpot}
+		)
+	</insert>
+
+	<select id="getMaxCodeByGrpCd" resultType="int">
+		SELECT
+			MAX(CODE) + 1 AS code
+		FROM device_list
+		WHERE grp_cd = #{grpCd}
+	</select>
+
+	<select id="getMaxGrpCd" resultType="String">
+		SELECT
+			MAX(grp_cd) + 1 AS grpCd
+		FROM device_list
+	</select>
+
+	<select id="getNewCode" resultType="int">
+		SELECT
+			MIN(CODE) + 100 AS code
+		FROM device_list
+		WHERE grp_cd = ( SELECT MAX(grp_cd) FROM device_list)
+	</select>
+
+	<select id="getDeviceListByGrpCdAndInstallation" resultType="ics.qst.vo.DeviceList">
+		SELECT
+			dl.code
+		,	dl.installation
+		,	dl.code_nm AS codeNm
+		,	dl.ip
+		,	dl.device_spot AS deviceSpot
+		,	dl.use_yn AS useYn
+		,	dl.use_yn_reason AS useYnReason
+		,	ds.value
+		FROM device_list dl
+		INNER JOIN device_status ds
+			ON dl.code = ds.code
+		WHERE grp_cd = #{grpCd}
+		<if test="installation != null and installation != ''">
+			AND installation = #{installation}
+		</if>
+	</select>
+
+	<update id="saveDeviceList" parameterType="ics.qst.vo.DeviceList">
+		UPDATE device_list SET
+			code_nm = #{codeNm}
+		,	installation = #{installation}
+		,	ip = #{ip}
+		,	device_spot = #{deviceSpot}
+		,	use_yn = #{useYn}
+		,	use_yn_reason = #{useYnReason}
+		WHERE code = #{code}
+	</update>
+</mapper>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+	<th:block th:replace="fragments/meta :: metaFragment(title='ICT-MypageInfo', useMetaCsrf='true')"></th:block>
+	<th:block th:replace="fragments/style :: styleFragment"></th:block>
+	<!--<link rel="stylesheet" href="/resources/publish/css/mypage.css">-->
+	<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-notify@0.5.4/dist/simple-notify.min.css" />-->
+</head>
+<body style="display:flex; width: 100vw; height:100vh; justify-content:center; align-items:center;">
+	<div class="text-center">
+		<p class="mb-50" style="font-size:20px; font-weight:600">신청 후 이용하실 수 있습니다.</p>
+		<form method="POST" th:action="@{/logout}">
+			<button class="custom light-blue">로그인 페이지로 돌아가기</button>
+		</form>
+	</div>
+	
+   
+</body>
+	<th:block th:replace="fragments/script :: scriptFragment('true')"></th:block>
+	
+	<script th:src="@{/resources/ics/common/js/string.js}"></script>
+	<script th:src="@{/resources/ics/common/js/regex.js}"></script>
+	
+
+</html>

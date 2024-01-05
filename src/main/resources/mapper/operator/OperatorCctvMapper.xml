@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ics.operator.cctv.OperatorCctvMapper">
+
+	<select id="getStationList"
+		resultType="ics.operator.cctv.dto.StationListResDTO">
+		<![CDATA[
+			select
+			  station.idx as 'stationIdx'
+			, station.station_name as 'stationName'
+			from 
+				station
+
+		]]>
+	</select>
+	
+	<!-- <select id="getStationList" resultType="ics.operator.cctv.dto.StationListResDTO">
+	<![CDATA[
+		select
+		  station.idx as 'stationIdx'
+		, station.station_name as 'stationName'
+		from 
+			station
+		where 
+			station.idx != 1
+	]]>
+	</select> -->
+	
+	<select id="getCctvList" parameterType="ics.operator.cctv.dto.CctvListReqDTO" resultType="ics.operator.cctv.dto.CctvListResDTO">
+	<![CDATA[
+		select 
+			  cctv.idx as 'cctvIdx'
+			, cctv.cctv_ws as 'cctvWs'
+			, concat(station.station_name, ' ' ,cctv.location) as 'cctvLocation'
+		from 
+			cctv
+		inner join station
+			on station.idx = cctv.station_idx 
+		where
+			station.idx = #{stationIdx}
+	]]>
+	</select>
+
+</mapper>

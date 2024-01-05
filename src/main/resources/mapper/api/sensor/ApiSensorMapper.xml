@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ics.api.sensor.SensorMapper">
+
+	
+	<select id="getSensorLogList" parameterType="ics.api.sensor.dto.SensorLogCsvReqDTO" resultType="ics.api.sensor.dto.SensorLogCsvResDTO">
+		with sensorLog as(
+			select 
+				a.*
+			from
+			(
+				select 
+					@rownum:=@rownum+1 as rowNum
+					, sensor_log.value as 'sensorLogValue'
+					, sensor_log.sensor_idx as 'sensorIdx'
+					, date_format(sensor_log.create_date, '%Y-%m-%d %H:%i:%s') as 'sensorLogCreateDate'
+				from ( select @rownum := 0) r, sensor_log
+				where 
+					date_format(sensor_log.create_date, '%Y-%m-%d') BETWEEN #{startDate} and #{endDate}
+					and sensor_log.sensor_idx = #{sensorIdx}			
+				order by 
+					sensor_log.create_date
+				desc
+			)a
+		) select 
+			sensorLog.*
+			, sensor.location_description as 'sensorLocationDescription'
+			, sensor.sensor_id as 'sensorId'
+			, sensor_type.sensor_type_name as 'sensorTypeName'
+			, sensor_type.sensor_type_code as 'sensorTypeCode'
+			, date_format(sensor.sensor_approval_date, '%Y-%m-%d')  as 'sensorApprovalDate'
+			, company.company_name as 'companyName'
+		from sensorLog
+		inner join sensor
+			on sensor.idx = sensorLog.sensorIdx
+		inner join sensor_type
+			on sensor_type.idx = sensor.sensor_type_idx
+		inner join company
+			on sensor.company_idx = company.idx 
+		order by
+			sensorLogCreateDate desc	
+	</select>
+	
+	
+	<select id="sensorIsId" parameterType="ics.api.sensor.dto.SensorIsIdReqDTO" resultType="Integer">
+	<![CDATA[
+		select count(idx) as 'cnt' from sensor 
+		where sensor_id = #{sensorId} 
+		and sensor_type_idx = #{sensorTypeIdx}
+	]]>
+	</select>
+	
+	<select id="getSensorTypeList" resultType="ics.api.sensor.dto.SensorTypeListResDTO">
+	<![CDATA[
+		select 
+			idx as 'sensorTypeIdx'
+			, sensor_type_name as 'sensorTypeName'
+			, sensor_type_code as 'sensorTypeCode'
+		from sensor_type
+	]]>
+	</select>	
+	
+	<select id="getIsSensorType" parameterType="ics.api.sensor.dto.SensorTypeAddReqDTO" resultType="Integer">
+	<![CDATA[
+		select 
+			count(idx) as 'cnt'
+		from sensor_type
+		where
+			sensor_type_code = #{sensorTypeCode}
+	]]>
+	</select>	
+	
+	<insert id="sensorTypeAdd" parameterType="ics.api.sensor.dto.SensorTypeAddReqDTO">
+	<![CDATA[
+		insert into	sensor_type
+			(
+				sensor_type_code
+				, sensor_type_name
+				, sensor_type_threshold
+			)
+		values
+			(
+				#{sensorTypeCode}
+				, #{sensorTypeName}
+				, 0
+			)
+	]]>
+	</insert>
+	
+<!-- 	<select id="getSensorLogAlarm" parameterType="Integer" resultType="ics.api.sensor.dto.SensorLogAlarmResDTO">
+	<![CDATA[
+		select 
+			idx as 'alarmIdx'
+			, message as 'alarmMessage'
+			, sensor_idx as 'sensorIdx'
+		from 
+			alarm 
+		where 
+			date_format(alarm.create_date, '%Y-%m-%d %H') >= date_format(now(), '%Y-%m-%d %H')
+	]]>
+	<if test="companyIdx == 1">
+			and alarm.sensor_idx in (
+				select idx from sensor where alarm_yn = 'Y' 
+				and sensor_approval_status = 'Y'
+				and use_yn = 'Y'
+		)
+	</if>
+	<if test="companyIdx != 1">
+			and alarm.sensor_idx in (
+				select idx from sensor where alarm_yn = 'Y' 
+				and sensor_approval_status = 'Y'
+				and use_yn = 'Y'
+				and company_idx = #{companyIdx}
+		)
+	</if>	
+		order by idx desc limit 50
+	</select> -->
+	
+</mapper>

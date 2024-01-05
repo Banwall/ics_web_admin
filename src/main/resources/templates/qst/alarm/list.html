@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+	<th:block th:replace="/qst/layout/style :: styleFragment"></th:block>
+	<link rel="stylesheet" href="/qst/css/lib/grid/mermaid.min.css">
+	<link rel="stylesheet" href="/qst/css/app/alarm/alarmList.css">
+	<link rel="stylesheet" href="/qst/css/app/main/main.css">
+</head>
+
+<body>
+	<th:block th:replace="layout/header-member :: headerFragmentMember(menu='sensorData')"></th:block>
+	<main>
+		<div class="wrap">
+			<div class="card">
+				<div class="search-container">
+					<div class="search-option">
+						<div class="mr-10">
+							<select class="select1" id="codeNmSelect">
+								<option value="">--선택--</option>
+								<option th:each="code : ${codeNmList}" th:text="${code.codeNm}" th:value="${code.code}">
+							</select>
+						</div>
+						<input type="date" class="custom" id="startDate">
+						<span>~</span>
+						<input type="date" class="custom mr-10" id="endDate">
+						<button type="button" id="searchBtn" class="custom light-blue ml10" onclick="search()">검색</button>
+					</div>
+					<div class="text-right" style="float: right;">
+						<a th:href="@{/}"><button class="notAlarmBtn">유지보수</button></a>
+					</div>
+				</div>
+				<div class="row pt-3 mx-0 ">
+					<div id="grid" class="col-12 px-0"></div>
+				</div>
+				<form id="excelForm">
+					<input type="hidden" id="hideCode" name="code" value="0">
+					<input type="hidden" id="hideStartDate" name="startDate" value="">
+					<input type="hidden" id="hideEndDate" name="endDate" value="">
+				</form>
+			</div>
+		</div>
+	</main>
+	
+	<th:block th:replace="layout/footer-member :: footerFragmentMember"></th:block>
+</body>
+	<th:block th:replace="layout/script :: scriptFragment('true')"></th:block>
+		
+	<script type="text/javascript"></script>
+</html>

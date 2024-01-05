@@ -1,0 +1,44 @@
+@import 'variables', 'mixin';
+
+.cctv-wrap {
+  height: 100%;
+  iframe {
+    width: 100%;
+    height: 100%;
+  }
+}
+#cctv {
+  display: grid;
+  grid-template-rows: 810px;
+  &.operator {
+    display: grid;
+    grid-template-columns: 355px 1355px;
+    grid-template-rows: 810px;
+    gap: 10px;
+  }
+  .card {
+    h3 {
+      padding: $ms;
+      font-weight: $bold;
+      font-size: $fn;
+      margin-bottom: $ms;
+    }
+    .flex-between {
+      margin-bottom: $ms;
+      h3 {
+        margin-bottom: 0;
+      }
+      .select {
+        width: 133px;
+      }
+    }
+    .member-list {
+      height: 700px;
+      > li {
+        div:last-child {
+          font-size: $fs;
+        }
+      }
+    }
+  }
+}

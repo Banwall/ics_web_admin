@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+	<!--<th:block th:replace="/qst/layout/style :: styleFragment"></th:block>-->
+	<th:block th:replace="fragments/meta :: metaFragment(title='ICT-Main', useMetaCsrf='true')"></th:block>
+	<th:block th:replace="fragments/style :: styleFragment"></th:block>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
+
+	<link rel="stylesheet" href="/resources/publish/css/main.css">
+	<link rel="stylesheet" href="/qst/css/lib/grid/mermaid.min.css">
+	<link rel="stylesheet" href="/qst/css/app/main/popup.css">
+	<link rel="stylesheet" href="/qst/css/app/main/main.css">
+</head>
+<body style="background-color: #eeeeee">
+	<th:block th:replace="fragments/header-manager :: headerFragmentManager(menu='main')"></th:block>
+	<th:block th:replace="manager/main/inc/incheonAirport :: incheonAirport"></th:block>
+	<main class="qstDiv" style="padding-bottom: 0px !important;">
+		<div class="wrap mt20" style="display: flex;">
+			<div class="card ml10" style="width: 100%; height: 815px;">
+				<div class="container">
+					<h2 id="h2Title" th:text="${board.idx == 0 ? '게시글 등록' : ''}"></h2>
+					<input type="hidden" id="flag" value="save">
+					<input type="hidden" id="detailIdx" th:value="${board.idx}">
+					<table style="padding-top:50px; text-align: center; width: 100%; border: 0;">
+						<tr>
+							<td style="height: 20px; text-align: center; background-color: #ccc; color: white;">글쓰기</td>
+						</tr>
+						<tr>
+							<td>
+								<table id="boardDetailTable" style="table-layout: fixed; width: 670px">
+									<th:block th:if="${board.idx == 0}">
+										<colgroup>
+											<col style="width: 140px;">
+											<col style="width: 1000px;">
+										</colgroup>
+										<tr>
+											<td style="text-align: center;">작성자</td>
+											<td> <input type=text id="writer"> </td>
+										</tr>
+										<tr>
+											<td style="text-align: center;">제목</td>
+											<td> <input type=text id="title"> </td>
+										</tr>
+										<tr>
+											<td style="text-align: center;">내용</td>
+											<td> <textarea id="comment" wrap="hard"></textarea> </td>
+										</tr>
+									</th:block>
+									<th:block th:unless="${board.idx == 0}">
+										<colgroup>
+											<col style="width: 140px;">
+											<col style="width: 500px;">
+											<col style="width: 100px;">
+											<col style="width: 400px;">
+										</colgroup>
+										<thead>
+											<tr>
+												<th class="table-center">작성자</th>
+												<th> <span id="detailWriter" th:text="${board.writer}"></span> </th>
+												<th class="">작성일자</th>
+												<th> <span id="detailCdt" th:text="${#strings.substring(board.cdt, 0, 19)}"></span> </th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td class="table-center">제목</td>
+												<td> <span id="detailTitle" th:text="${board.title}"></span> </td>
+												<td class="">수정일자</td>
+												<td> <span id="detailMdt" th:text="${#strings.substring(board.mdt, 0, 19)}"></span> </td>
+											</tr>
+											<tr>
+												<td class="table-center">내용</td>
+												<td colspan="3">
+													<textarea id="detailComment" wrap="hard" th:text="${board.comment}" readonly="readonly"></textarea>
+												</td>
+											</tr>
+										</tbody>
+									</th:block>
+								</table>
+							</td>
+						</tr>
+					</table>
+					<div class="boardBtnDiv">
+						<input type="hidden" value="${board.idx}">
+						<button id="boardWriteBtnPost" th:text="${board.idx == 0 ? '등록' : '수정'}"></button>
+						<button id="boardListBtn" onclick="location.href='/qst/board/reportBoardList'">목록</button>
+					</div>
+					<div id="smallBoardListDiv" style="width: 1140px; margin-top: 10px;" th:if="${board.idx != 0}">
+						<table>
+							<colgroup>
+								<col style="width: 140px;">
+								<col style="width: 1000px;">
+							</colgroup>
+							<tbody>
+								<tr>
+									<td>다음글</td>
+									<td> <span th:text="${board.nextTitle == null ? '다음글이 없습니다.' : board.nextTitle}"
+											   th:onclick="|location.href='/qst/board/writeBoard?idx=${board.nextIdx}'|"
+											   th:style="${board.nextTitle == null ? '' : 'cursor: pointer'}"></span> </td>
+								</tr>
+								<tr>
+									<td>이전글</td>
+									<td> <span th:text="${board.prevTitle == null ? '이전글이 없습니다.' : board.prevTitle}"
+											   th:onclick="|location.href='/qst/board/writeBoard?idx=${board.prevIdx}'|"
+											   th:style="${board.prevTitle == null ? '' : 'cursor: pointer'}">1번글</span> </td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+</body>
+<th:block th:replace="fragments/script :: scriptFragment('true')"></th:block>
+<script type="text/JavaScript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script type="text/JavaScript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="/qst/js/app/main/board.js"></script>
+
+<script th:inline="javascript">
+
+</script>
+</html>

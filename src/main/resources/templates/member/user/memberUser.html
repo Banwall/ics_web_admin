@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+	<th:block th:replace="fragments/meta :: metaFragment(title='ICT-User', useMetaCsrf='true')"></th:block>
+	<th:block th:replace="fragments/style :: styleFragment"></th:block>
+	<link rel="stylesheet" href="/resources/publish/css/user.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-notify@0.5.4/dist/simple-notify.min.css" />
+</head>
+
+<body>
+	<th:block th:replace="fragments/header-member :: headerFragmentMember(menu='user')"></th:block>
+	<main>
+		<div class="wrap member" id="user">
+			<div class="card">
+				<h3>실증기업 정보</h3>
+				<ul class="member-info">
+					<li>
+						<div class="input-box">
+							<p>실증기업 종류</p>
+							<input id="companyRoleText" type="text" class="custom" th:value="${myCompanyInfo.companyRoleText}" readonly>
+						</div>
+						<div class="input-box">
+							<p><span style="color:red;">*</span> 실증기관 이름</p>
+							<input id="companyName" type="text" class="custom" th:value="${myCompanyInfo.companyName}" readonly placeholder="실증기관 이름">
+						</div>
+					</li>
+					<!--<li>
+						<div class="input-box">
+							<p>실증기관 아이디</p>
+							<input type="text" class="custom" value="koreasoft" readonly>
+						</div>
+						
+					</li>-->
+					<li>
+						<div class="input-box">
+							<p>대표자 이름</p>
+							<input id="companyPresidentName" type="text" class="custom" th:value="${myCompanyInfo.companyPresidentName}" readonly placeholder="대표자 이름" >
+						</div>
+						<div class="input-box">
+							<p><span style="color:red;">*</span> 대표 이메일 주소</p>
+							<input id="companyEmail" type="text" class="custom" th:value="${myCompanyInfo.companyEmail}" readonly placeholder="대표 이메일 주소">
+						</div>
+					</li>
+					<li>
+						<div class="input-box">
+							<p>사업자 등록번호</p>
+							<input id="companyRegistNumber" type="text" class="custom" th:value="${myCompanyInfo.companyRegistNumber}" readonly placeholder="사업자 등록번호">
+						</div>
+						<div class="input-box">
+							<p>회사 전화번호</p>
+							<input id="companyPhone" type="text" class="custom" th:value="${myCompanyInfo.companyPhone}" readonly placeholder="회사 전화번호">
+						</div>
+					</li>
+					<li>
+						<div class="input-box">
+							<p>회사 주소</p>
+							<input id="companyAddress" type="text" class="custom" th:value="${myCompanyInfo.companyAddress}" readonly placeholder="회사 주소">
+						</div>
+						<div class="input-box">
+							<p>운영사</p>
+							<input id="test" type="text" class="custom" th:value="${myCompanyInfo.stationName}" readonly placeholder="회사 주소">
+						</div>
+					</li>
+					<li>
+						<div class="input-box">
+							<p>회사 홈페이지</p>
+							<input id="companyUrl" type="text" class="custom" th:value="${myCompanyInfo.companyUrl}" readonly placeholder="회사 홈페이지">
+						</div>
+						<div class="input-box">
+							<p>등록일자</p>
+							<input id="companyCreateDateDt" type="text" class="custom" th:value="${myCompanyInfo.companyCreateDateDt}" readonly>
+						</div>
+					</li>
+				</ul>
+				<div class="button-container">
+					<button id="companySaveBtn" class="custom dark-blue" style="display: none;">저장</button>
+					<button id="companyCancelBtn" class="custom gray" style="display: none;">취소</button>
+					<button id="companyModBtn" class="custom dark-blue">실증기업 정보 변경</button>
+				</div>
+			</div>
+			<div class="card">
+				<h3>회원 정보</h3>
+				<div class="list-container">
+					<ul class="member-detail" id="memberInfoListUl">
+						<!--<li class="active">
+							<p>· 회원 아이디: gdhong1</p>
+							<p>· 부서: 영업부</p>
+							<p>· 회원 이름: 홍길동</p>
+							<p>· 직책: 과장</p>
+							<p>· 연락처: 010-0000-0000</p>
+							<p>· 등록 일자: 2022-02-07 (22:01)</p>
+							<p>· 이메일 주소: gdhong@gmail.com</p>
+							<span class="close" id="deleteModalBtn"></span>
+						</li>
+						<li>
+							<p>· 회원 아이디: gdhong1</p>
+							<p>· 부서: 영업부</p>
+							<p>· 회원 이름: 홍길동</p>
+							<p>· 직책: 과장</p>
+							<p>· 연락처: 010-0000-0000</p>
+							<p>· 등록 일자: 2022-02-07 (22:01)</p>
+							<p>· 이메일 주소: gdhong@gmail.com</p>
+							<span class="close"></span>
+						</li>
+						<li>
+							<p>· 회원 아이디: gdhong1</p>
+							<p>· 부서: 영업부</p>
+							<p>· 회원 이름: 홍길동</p>
+							<p>· 직책: 과장</p>
+							<p>· 연락처: 010-0000-0000</p>
+							<p>· 등록 일자: 2022-02-07 (22:01)</p>
+							<p>· 이메일 주소: gdhong@gmail.com</p>
+							<span class="close"></span>
+						</li>-->
+					</ul>
+					<div class="pagination">
+						<ul id="memberPageUl">
+						<!--	<li class="arrow"></li>
+							<li class="active">1</li>
+							<li>2</li>
+							<li>3</li>
+							<li>4</li>
+							<li class="arrow"></li>-->
+						</ul>
+					</div>
+				</div>
+				<div class="button-container">
+					<button class="custom dark-blue" id="addMemberModalBtn">등록</button>
+					<button class="custom navy" id="modifyModalBtn">수정</button>
+					<button class="custom light-blue" id="pwdModalBtn">비밀번호 변경</button>
+				</div>
+			</div>
+			<div class="card">
+				<h3>센서 정보</h3>
+				<div class="list-container">
+					<ul class="sensor-list sensor-list-more" id="sensorListUl">
+						<!--<li class="agree active">
+							<div class="sensor-index">
+								<div class="sensor-name">
+									<span></span> 센서 1
+								</div>
+							</div>
+							<div class="sensor-desc">
+								<p>· 센서 아이디: F21651651651</p>
+								<p>· 마지막 수신 시간: 2021-10-19 (20:21)</p>
+								<p>· 센서 종류: 습도</p>
+								<p>· 승인 요청 일자: 2021-10-19 (20:21)</p>
+								<p>· 센서 값: 습도 50%</p>
+								<p>· 설치 위치: 부평역 2번 출입구 앞</p>
+								<p>· 승인 일자: 2021-10-19 (20:21)</p>
+								<span class="close" id="sensorDeleteModalBtn"></span>
+							</div>
+						</li>
+						<li class="agree">
+							<div class="sensor-index">
+								<div class="sensor-name">
+									<span></span> 센서 1
+								</div>
+							</div>
+							<div class="sensor-desc">
+								<p>· 센서 아이디: F21651651651</p>
+								<p>· 마지막 수신 시간: 2021-10-19 (20:21)</p>
+								<p>· 센서 종류: 습도</p>
+								<p>· 승인 요청 일자: 2021-10-19 (20:21)</p>
+								<p>· 센서 값: 습도 50%</p>
+								<p>· 설치 위치: 부평역 2번 출입구 앞</p>
+								<p>· 승인 일자: 2021-10-19 (20:21)</p>
+								<span class="close"></span>
+							</div>
+						</li>-->
+					</ul>
+					<div class="pagination">
+						<ul id="sensorPageUl">
+							<!--<li class="arrow"></li>
+							<li class="active">1</li>
+							<li>2</li>
+							<li>3</li>
+							<li>4</li>
+							<li class="arrow"></li>-->
+						</ul>
+					</div>
+				</div>
+				<div class="button-container">
+					<button class="custom dark-blue" id="sensorAddModalBtn">등록</button>
+					<button class="custom navy" id="sensorModifyModalBtn">수정</button>
+				</div>
+			</div>
+		</div>
+	</main>
+	<article class="modal" id="addMemberModal">
+		<div class="modal-wrap">
+			<div class="modal-head">
+				<h2>회원 신규 등록</h2>
+				<span class="close">
+					<img src="/resources/publish/images/close.svg" alt="">
+				</span>
+			</div>
+			<div class="modal-body">
+				<ul class="member-info mb-50">
+					<li>
+						<div class="input-box id-check">
+							<p><span style="color:red;">*</span> 회원 아이디</p>
+							<input  type="text" id="addMemberId" class="custom" value="" placeholder="아이디">
+							<button type="button" id="memberIdCheckBtn" class="btn sm dark-blue">중복확인</button>
+							<span class="error" id="addMemberIdError" style="display: none;">이미 사용중인 아이디입니다.</span>
+							<input type="hidden" id="addMemberCheck" readonly value="">
+						</div>
+					</li>
+					<li>
+						<div class="input-box">
+							<p><span style="color:red;">*</span> 회원 이름</p>
+							<input type="text" id="addMemberName" class="custom" value="" placeholder="회원 이름">
+						</div>
+						<div class="input-box">
+							<p><span style="color:red;">*</span> 비밀번호</p>
+							<input type="password" id="addMemberPwd" class="custom" value="" placeholder="비밀번호">
+						</div>
+					</li>
+					<li>
+						<div class="input-box">
+							<p>연락처</p>
+							<input type="text" id="addMemberTel" class="custom" value="" placeholder="연락처 01012345678">
+						</div>
+						<div class="input-box">
+							<p>이메일 주소</p>
+							<input type="text" id="addMemberEmail" class="custom" value="" placeholder="이메일 주소">
+						</div>
+					</li>
+					<li>
+						<div class="input-box">
+							<p>부서</p>
+							<input type="text" id="addMemberDeptName" class="custom" value="" placeholder="부서">
+						</div>
+						<div class="input-box">
+							<p>직책</p>
+							<input type="text" id="addMemberRank" class="custom" value="" placeholder="직책">
+						</div>
+					</li>
+				</ul>
+				<div class="button-container">
+					<button type="button" id="addMemberProcBtn" class="custom dark-blue">등록</button>
+					<button type="button" id="addMemberCancelBtn" class="custom">취소</button>
+				</div>
+			</div>
+		</div>
+	</article>
+	<article class="modal" id="modifyModal">
+		<div class="modal-wrap">
+			<div class="modal-head">
+				<h2>회원 정보 수정</h2>
+				<span class="close">
+					<img src="/resources/publish/images/close.svg" alt="">
+				</span>
+			</div>
+			<div class="modal-body">
+				<ul class="member-info mb-50">
+					<li>
+						<div class="input-box">
+							<p>회원 아이디</p>
+							<input type="text" id="memberModId" class="custom" value="" readonly>
+						</div>
+						<div class="input-box">
+							<p><span style="color:red;">*</span> 회원 이름</p>
+							<input type="text" id="memberModName" class="custom" value="" placeholder="회원 이름">
+						</div>
+					</li>
+					<li>
+						<div class="input-box">
+							<p>연락처</p>
+							<input type="text" id="memberModTel" class="custom" value="" placeholder="연락처 01012345678">
+						</div>
+						<div class="input-box">
+							<p>이메일 주소</p>
+							<input type="text" id="memberModEmail" class="custom" value="" placeholder="이메일 주소">
+						</div>
+					</li>
+					<li>
+						<div class="input-box">
+							<p>부서</p>
+							<input type="text" id="memberModDeptName" class="custom" value="" placeholder="부서">
+						</div>
+						<div class="input-box">
+							<p>직책</p>
+							<input type="text" id="memberModRank" class="custom" value="" placeholder="직책">
+						</div>
+					</li>
+				</ul>
+				<div class="button-container">
+					<button id="memberModProcBtn" class="custom dark-blue">저장</button>
+					<button id="memberModCancelBtn" class="custom">취소</button>
+					<input type="hidden" id="memberModIdx" value="">
+				</div>
+			</div>
+		</div>
+	</article>
+	<article class="modal" id="pwdModal">
+		<div class="modal-wrap">
+			<div class="modal-head">
+				<h2>비밀번호 변경</h2>
+				<span class="close">
+					<img src="/resources/publish/images/close.svg" alt="">
+				</span>
+			</div>
+			<div class="modal-body">
+				<ul class="member-info mb-50">
+					<!--<li>
+						<div class="input-box">
+							<p>기존 비밀번호</p>
+							<input id="" type="password" class="custom" value="">
+						</div>
+					</li>-->
+					<li>
+						<div class="input-box">
+							<p>새 비밀번호</p>
+							<input id="modPwd1" type="password" class="custom" value="" placeholder="새 비밀번호">
+						</div>
+					</li>
+					<li>
+						<div class="input-box id-check">
+							<p>새 비밀번호 확인</p>
+							<input id="modPwd2" type="password" class="custom" value="" placeholder="새 비밀번호 확인">
+							<span  id="modPwdError" class="error" style="display: block;"></span>
+						</div>
+					</li>
+				</ul>
+				<div class="button-container">
+					<button id="modPwdProcBtn" class="custom dark-blue">저장</button>
+					<button id="modPwdCancelBtn" class="custom">취소</button>
+					<input type="hidden" id="modPwdMemberIdx" value="" readonly>
+				</div>
+			</div>
+		</div>
+	</article>
+	<article class="modal" id="deleteModal">
+		<div class="modal-wrap">
+			<div class="modal-head">
+				<h2>회원 삭제</h2>
+				<span class="close">
+					<img src="/resources/publish/images/close.svg" alt="">
+				</span>
+			</div>
+			<div class="modal-body">
+				<p class="mb-30" id="memberDelSpan">
+					<!--<span>"LG전자"</span>을(를)<br>
+					<b>삭제</b>하시겠습니까?-->
+				</p>
+				<div>
+					<button id="memberDelProcBtn" class="custom dark-blue">확인</button>
+					<button id="memberDelProcCancelBtn" class="custom gray">취소</button>
+				</div>
+			</div>
+		</div>
+	</article>
+
+	<article class="modal" id="sensorAddModal">
+		<div class="modal-wrap">
+			<div class="modal-head">
+				<h2>센서 신규 등록</h2>
+				<span class="close">
+					<img src="/resources/publish/images/close.svg" alt="">
+				</span>
+			</div>
+			<div class="modal-body">
+				<ul class="member-info mb-50">
+					<li>
+						<div class="input-box">
+							<p><span style="color:red;">*</span> 센서 아이디</p>
+							<input id="sensorAddId" type="text" class="custom w-70" value="" placeholder="센서 아이디">
+							<button id="sensorAddCheckBtn" class="custom dark-blue w-28" style="font-size:12px; padding:0 5px; height:40px; vertical-align:top">중복확인</button>
+							<input type="hidden" id="sensorAddCheck"  value="">
+						</div>
+					</li>
+					<li>
+						<div class="input-box">
+							<p><span style="color:red;">*</span> 센서 종류</p>
+							<div class="select" id="sensorSelect">
+								<input id="sensorAddInput" type="text" class="custom" th:data-sensor-type-idx="${sensorTypeList[0].sensorTypeIdx}" th:value="${sensorTypeList[0].sensorTypeName}" readonly="readonly">
+								<ul id="sensorAddUl" class="select-dropdown">
+									<th:block th:each="list : ${sensorTypeList}">
+										<li th:data-sensor-type-idx='${list.sensorTypeIdx}'>[[${list.sensorTypeName}]]</li>
+									</th:block>
+									<!--<li>내부 온도 센서</li>
+									<li>외부 온도 센서</li>
+									<li>내부 습도 센서</li>
+									<li>외부 습도 센서</li>
+									<li>미세먼지 센서</li>
+									<li>왼쪽 문 센서</li>
+									<li>오른쪽 문 센서</li>
+									<li>이산화탄소 센서</li>
+									<li>소음 센서</li>
+									<li>조도 센서</li>
+									<li>진동 센서</li>-->
+								</ul>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="input-box">
+							<p><span style="color:red;">*</span> 센서 설치 위치</p>
+							<div class="select" id="locationSelect">
+								<input id="stationAddInput" type="text" class="custom" th:data-station-idx="${stationList[0].stationIdx}" th:value="${stationList[0].stationName}" readonly="readonly">
+								<ul id="stationAddUl" class="select-dropdown">
+									<th:block th:each="list : ${stationList}">
+										<li th:data-station-idx="${list.stationIdx}">[[${list.stationName}]]</li>
+									</th:block>
+									<!--<li>내부 온도 센서</li>
+									<li>외부 온도 센서</li>
+									<li>내부 습도 센서</li>
+									<li>외부 습도 센서</li>
+									<li>미세먼지 센서</li>
+									<li>왼쪽 문 센서</li>
+									<li>오른쪽 문 센서</li>
+									<li>이산화탄소 센서</li>
+									<li>소음 센서</li>
+									<li>조도 센서</li>
+									<li>진동 센서</li>-->
+								</ul>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="input-box">
+							<p><span style="color:red;">*</span> 센서 위치</p>
+							<input id="sensorAddLocationDescription" type="text" class="custom" value="" placeholder="센서 위치">
+						</div>
+					</li>
+					<li>
+					<div class="input-box">
+							<p><span style="color:red;">*</span> 센서 임계치</p>
+							<input id="sensorAddThreshold" type="number" class="custom" value="" placeholder="센서 임계치">
+						</div>
+					</li>					
+				</ul>
+				<div class="button-container">
+					<button id="sensorAddBtn" class="custom dark-blue">등록</button>
+					<button id="sensorAddCancelBtn" class="custom">취소</button>
+				</div>
+			</div>
+		</div>
+	</article>
+	<article class="modal" id="sensorModifyModal">
+		<div class="modal-wrap">
+			<div class="modal-head">
+				<h2>센서 정보 수정</h2>
+				<span class="close">
+					<img src="/resources/publish/images/close.svg" alt="">
+				</span>
+			</div>
+			<div class="modal-body">
+				<ul class="member-info mb-50">
+					<li>
+						<div class="input-box">
+							<p><span style="color:red;">*</span> 센서 아이디</p>
+							<input id="sensorModId" type="text" class="custom w-70" value="" placeholder="센서 아이디">
+														
+							<button class="custom dark-blue w-28" style="font-size:12px; padding:0 5px; height:40px; vertical-align:top" id="sensorModCheckBtn">중복확인</button>
+							<input type="hidden" id="sensorModCheck"  value="" data-old-sensor-id='' data-old-sensor-type-idx=''>
+						</div>
+						<div class="input-box">
+							<p><span style="color:red;">*</span> 센서 종류</p>
+							<div class="select" id="sensorModifySelect">
+								<input id="sensorModifyInput" type="text" th:data-sensor-type-idx="${sensorTypeList[0].sensorTypeIdx}" class="custom" th:value="${sensorTypeList[0].sensorTypeName}" readonly="readonly">
+								<ul class="select-dropdown" id="sensorModUl">
+									<th:block th:each="list : ${sensorTypeList}">
+										<li th:data-sensor-type-idx="${list.sensorTypeIdx}">[[${list.sensorTypeName}]]</li>
+									</th:block>
+								</ul>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="input-box">
+							<p><span style="color:red;">*</span> 센서 설치 위치</p>
+							<div class="select" id="stationModifySelect">
+								<input id="stationModifyInput" type="text" th:data-station-idx="${stationList[0].stationIdx}" class="custom" th:value="${stationList[0].stationName}" readonly="readonly">
+								<ul class="select-dropdown" id="stationModUl">
+									<th:block th:each="list : ${stationList}">
+										<li th:data-station-idx="${list.stationIdx}">[[${list.stationName}]]</li>
+									</th:block>
+								</ul>
+							</div>
+						</div>
+						<div class="input-box">
+							<p><span style="color:red;">*</span> 센서 위치</p>
+							<input id="sensorModLocationDescription" type="text" class="custom" value="" placeholder="센서 위치">
+						</div>
+					</li>
+					<li>
+						<div class="input-box">
+							<p><span style="color:red;">*</span> 센서 임계치</p>
+							<input id="sensorModThreshold" type="number" class="custom" value="">
+						</div>					
+						<div class="input-box">
+							<p>센서 값</p>
+							<input id="sensorModValue" type="text" class="custom" value="" readonly>
+						</div>
+					</li>
+					<li>
+						<div class="input-box">
+							<p>마지막 수신 시간</p>
+							<input id="sensorModReceiveDate" type="text" class="custom" value="" readonly>
+						</div>					
+						<div class="input-box">
+							<p>승인 요청 일자</p>
+							<input id="sensorModRequestApprovalDate" type="text" class="custom" value="" readonly>
+						</div>
+					</li>
+					<li>
+						<div class="input-box">
+							<p>승인 상태</p>
+							<input id="sensorModApprovalStatus" type="text" class="custom" value="" readonly>
+						</div>
+						<div class="input-box">
+							<p>승인 일자</p>
+							<input id="sensorModApprovalDate" type="text" class="custom" value="" readonly>
+						</div>								
+					</li>
+					
+				</ul>
+				<div class="button-container">
+					<button id="sensorModProcBtn" class="custom dark-blue">저장</button>
+					<button id="sensorModProcCancelBtn" class="custom">취소</button>
+					<button id="sensorApprovalBtn" class="custom">승인요청</button>
+					<input type="hidden" id="sensorModIdx" value="" readonlay>
+					<input type="hidden" id="sensorApprovalStatus" value="">
+				</div>
+			</div>
+		</div>
+	</article>
+	<article class="modal" id="sensorDeleteModal">
+		<div class="modal-wrap">
+			<div class="modal-head">
+				<h2>센서 삭제</h2>
+				<span class="close">
+					<img src="/resources/publish/images/close.svg" alt="">
+				</span>
+			</div>
+			<div class="modal-body">
+				<p class="mb-30" id="delProcText">
+					<!--<span>"LG전자"</span>을(를)<br>
+					<b>삭제</b>하시겠습니까?-->
+				</p>
+				<div>
+					<input type="hidden" value="" id="sensorDeleteInput">
+					<button id="sensorDelProBtn" class="custom dark-blue">확인</button>
+					<button id="sensorDelProcCancelBtn" class="custom gray">취소</button>
+				</div>
+			</div>
+		</div>
+	</article>
+	<article class="modal" id="agreeModal">
+			<div class="modal-wrap">
+				<div class="modal-head">
+					<h2>센서 승인 요청</h2>
+					<span class="close">
+						<img src="/resources/publish/images/close.svg" alt="">
+					</span>
+				</div>
+				<div class="modal-body">
+					<p class="mb-30">
+						<b>승인요청</b> 하시겠습니까?
+					</p>
+					<div>
+						<button id="sensorAgreeProcBtn" class="custom dark-blue">확인</button>
+						<button id="sensorAgreeProcCancelBtn" class="custom gray">취소</button>
+					</div>
+				</div>
+			</div>
+		</article>	
+	<input type="hidden" id="memberCompanyIdx" th:value="${#authentication.principal.companyIdx}" readonly>
+	<th:block th:replace="fragments/footer-member :: footerFragmentMember"></th:block>
+</body>
+	<th:block th:replace="fragments/script :: scriptFragment('true')"></th:block>
+	<script src="https://cdn.jsdelivr.net/npm/simple-notify@0.5.4/dist/simple-notify.min.js"></script>
+	<script th:src="@{/resources/ics/common/js/regex.js}"></script>
+	<script th:src="@{/resources/ics/common/js/string.js}"></script>
+	<script th:src="@{/resources/ics/member/js/memberUser.js}"></script>
+
+</html>

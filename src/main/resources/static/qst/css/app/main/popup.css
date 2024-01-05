@@ -1,0 +1,68 @@
+@charset "EUC-KR";
+
+.popupLayer { display: none; background-color: white; width: 900px; height: auto; }
+
+.deviceLogModal {
+	position: relative;
+    display: flex;
+	width: 1100px;
+	height: 470px;
+}
+
+.deviceLogDialog {
+	width: 1000px;
+    display: flex;
+    top: 15%;
+}
+
+.modal .modal-wrap .modal-head h2 {
+	font-size: 14px;
+	font-weight: 500;
+	color: #fff;
+}
+
+.modal .modal-wrap .modal-head .close {
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
+}
+
+.device-info {
+	padding: 0 30px;
+}
+
+.device-info > li {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-pack: justify;
+	-ms-flex-pack: justify;
+	justify-content: space-between;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	margin-bottom: 15px;
+}
+
+.device-info > li input,
+.device-info > li .select {
+	width: 290px;
+}
+
+.device-info > li .input-box {
+	margin-bottom: 0;
+}
+
+.device-info > li .line {
+	margin: 30px 0;
+	height: 1px;
+	background: #eee;
+}
+
+#addDeviceGrpNm {
+	width: 290px;
+	height: 40px;
+	border-radius: 5px;
+	border: 1px solid rgba(127, 127, 127, 0.2);
+	padding: 0 10px;
+}

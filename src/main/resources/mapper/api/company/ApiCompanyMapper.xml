@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ics.api.company.CompanyMapper">
+	
+	<insert id="companyJoinProc" parameterType="ics.api.company.dto.CompanyJoinProcReqDTO" useGeneratedKeys="true" keyProperty="companyIdx">
+	<![CDATA[
+		INSERT INTO company
+			(
+				  create_date
+				, use_yn
+				, company_name
+				, company_email
+				, company_phone
+				, company_address
+				, company_url
+				, company_role
+				, company_regist_number
+				, president_name
+				, approval_status
+				, approval_date
+				, regist_type
+				, registrant
+			)
+		VALUES
+			(
+				  now()
+				, 'Y'
+				, #{companyName}
+				, #{companyEmail}
+				, #{companyPhone}
+				, #{companyAddress}
+				, #{companyUrl}
+				, #{companyRole}
+				, #{companyRegistNumber}
+				, #{companyPresidentName}
+				, #{companyApprovalStatus}
+				, now()
+				, #{registType}
+				, #{registrant}
+			)
+
+	]]>
+	</insert>
+
+	<insert id="companyStationJoinProc" parameterType="ics.api.company.dto.CompanyJoinProcReqDTO" useGeneratedKeys="true" keyProperty="companyIdx">
+	<![CDATA[
+		INSERT INTO company_station
+		(
+			company_idx
+		,	station_number
+		,	use_yn
+		,	cdt
+		,	mdt
+		)
+		VALUES
+		(
+			#{companyIdx}
+		,	#{selectManager}
+		,	'Y'
+		,	NOW()
+		,	NOW()
+		)
+		]]>
+	</insert>
+	
+	<insert id="memberJoinProc" parameterType="ics.api.company.dto.CompanyJoinProcReqDTO" >
+	<![CDATA[
+		INSERT INTO member
+			(
+				  create_date
+				, use_yn
+				, member_id
+				, member_pw
+				, member_name
+				, member_tel
+				, member_email
+				, member_approval_status
+				, member_approval_date
+				, company_idx
+				, member.rank
+				, dept_name
+			)
+		VALUES
+			(
+				  now()
+				, 'Y'
+				, #{memberId}
+				, #{encMemberPwd}
+				, concat(#{companyName}, ' 관리자')
+				, NULL
+				, NULL
+				, 'Y'
+				, now()
+				, #{companyIdx}
+				, NULL
+				, NULL
+			)
+
+	]]>
+	</insert>
+	
+	<update id="approvalProc" parameterType="ics.api.company.dto.CompanyApprovalReqDTO" >
+		
+		update
+			company
+		set
+			  approval_status = #{companyApprovalStatus}
+			<if test='companyApprovalStatus == "Y"'>  
+			, approval_date = now()
+			</if>
+			<if test='companyApprovalStatus != "Y"'>
+			, approval_date = null
+			</if>
+			, modifier = #{modifier}
+			, modify_date = now() 
+		where
+			company.idx = #{companyIdx}	
+	</update>
+	
+	<update id="delProc" parameterType="ics.api.company.dto.CompanyDelProcReqDTO" >
+	<![CDATA[		
+		update
+			company
+		set
+			  modifier = #{modifier}
+			, modify_date = now()
+			, use_yn = 'N'
+		where
+			company.idx = #{companyIdx}	
+	]]>
+	</update>
+	
+	<update id="modProc" parameterType="ics.api.company.dto.CompanyModProcReqDTO" >
+	<![CDATA[		
+		update
+			company
+		set
+			  company_name = #{companyName}
+			, company_email = #{companyEmail}
+			, company_phone = #{companyPhone}
+			, company_address = #{companyAddress}
+			, company_url = #{companyUrl}
+			, company_regist_number = #{companyRegistNumber}
+			, president_name = #{companyPresidentName}
+			, modifier = #{modifier}
+			, modify_date = now()
+			, company_role = #{companyRole}
+		where
+			company.idx = #{companyIdx}	
+	]]>
+	</update>
+</mapper>

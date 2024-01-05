@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+	<!--<th:block th:replace="/qst/layout/style :: styleFragment"></th:block>-->
+	<th:block th:replace="fragments/meta :: metaFragment(title='ICT-Main', useMetaCsrf='true')"></th:block>
+	<th:block th:replace="fragments/style :: styleFragment"></th:block>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
+
+	<link rel="stylesheet" href="/resources/publish/css/main.css">
+	<link rel="stylesheet" href="/qst/css/lib/grid/mermaid.min.css">
+	<link rel="stylesheet" href="/qst/css/app/main/popup.css">
+	<link rel="stylesheet" href="/qst/css/app/main/main.css">
+</head>
+<body style="background-color: #eeeeee">
+	<th:block th:replace="fragments/header-manager :: headerFragmentManager(menu='main')"></th:block>
+	<th:block th:replace="manager/main/inc/incheonAirport :: incheonAirport"></th:block>
+	<main class="qstDiv" style="padding-bottom: 0px !important;">
+		<div class="wrap mt20" style="display: flex;">
+			<div class="card" style="width: 315px; height: 815px;">
+				<div class="mb-15 deviceListTitle">
+					<span>디바이스 목록</span>
+					<select id="installationSelect">
+						<option value="">ALL</option>
+						<option th:each="list : ${installationList}" th:value="${list}" th:text="${list}"></option>
+					</select>
+				</div>
+				<ul class="grpNm-list" id="grpNmListUl" style="overflow-y: scroll; padding-left: 20px;">
+					<th:block th:each="list : ${grpNmList}">
+						<li class="grpNmLi" th:classappend="${listStat.index == 0 ? 'active' : ''}" th:data-grp-cd="${list.grpCd}">
+							<div style="">[[${list.grpNm}]]</div>
+						</li>
+					</th:block>
+				</ul>
+				<button class="custom dark-blue" id="addDeviceModalBtn" onclick="openDeviceAddModal();">디바이스 등록</button>
+			</div>
+
+			<div class="card ml10" style="width: 1356px; height: 815px;">
+				<div class="device-table">
+					<div class="table-wrap">
+						<table id="deviceListTable">
+							<thead>
+								<tr>
+									<th>코드명</th>
+									<th>설치연도</th>
+									<th>IP</th>
+									<th style="width: 225px !important;">설치 위치</th>
+									<th>현재상태</th>
+									<th>사용여부</th>
+									<th style="width: 640px !important;">미사용 이유</th>
+								</tr>
+							</thead>
+							<tbody>
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div style="margin-top: 25px; display: flex; justify-content: flex-end;">
+					<button class="custom dark-blue" id="saveDeviceList">저장</button>
+				</div>
+			</div>
+		</div>
+
+		<article class="modal" id="deviceAddModal">
+			<div class="modal-wrap">
+				<div class="modal-head">
+					<h2>디바이스 신규 등록</h2>
+					<span class="close">
+                    <img src="/resources/publish/images/close.svg" alt="" onclick="closeDeviceAddModal();">
+                </span>
+				</div>
+				<div class="modal-body">
+					<ul class="device-info mb-50">
+						<li>
+							<div class="input-box">
+								<p><span style="color:red;">*</span> 디바이스 그룹명</p>
+								<select id="addDeviceGrpNm" class="custom">
+									<option value="">--선택--</option>
+								</select>
+							</div>
+							<div class="input-box selfInputDiv">
+								<p><span style="color:red;">*</span> 직접입력</p>
+								<input type="text" id="addDeviceSelfGrpNm" class="custom" value="" placeholder="직접입력">
+							</div>
+						</li>
+						<li>
+							<div class="input-box">
+								<p><span style="color:red;">*</span> 코드명</p>
+								<input type="text" id="addCodeNm" class="custom" value="" placeholder="코드명">
+							</div>
+							<div class="input-box">
+								<p><span style="color:red;">*</span> 아이피</p>
+								<input type="text" id="addIp" class="custom" value="" placeholder="아이피">
+							</div>
+						</li>
+						<li>
+							<div class="input-box">
+								<p><span style="color:red;">*</span> 설치연도</p>
+								<input type="text" id="addInstallation" class="custom" value="" placeholder="설치연도">
+							</div>
+							<div class="input-box">
+								<p><span style="color:red;">*</span> 설치위치</p>
+								<input type="text" id="addDeviceSpot" class="custom" value="" placeholder="설치위치">
+							</div>
+						</li>
+					</ul>
+					<div class="button-container">
+						<button type="button" id="addDeviceBtn" class="custom dark-blue" onclick="addDevice();">등록</button>
+						<button type="button" id="addDeviceCancelBtn" class="custom" onclick="closeDeviceAddModal();">취소</button>
+					</div>
+				</div>
+			</div>
+		</article>
+	</main>
+</body>
+<th:block th:replace="fragments/script :: scriptFragment('true')"></th:block>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+<script type="text/JavaScript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script type="text/JavaScript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="/qst/js/app/main/deviceList.js"></script>
+
+<script th:inline="javascript">
+
+</script>
+</html>

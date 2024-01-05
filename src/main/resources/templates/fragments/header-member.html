@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<th:block th:fragment="headerFragmentMember(menu)">
+	<th:block th:replace="fragments/loding :: loadingFragment"></th:block>
+	<header>
+		<div class="wrap">
+			<h1>
+				<img src="/resources/publish/images/logo.png" alt="">
+			</h1>
+			<div class="title">
+				<p>AIoT 실증기업</p>
+			</div>
+			<div class="user">
+				<div>
+					<a href="http://221.154.134.35">플랫폼 바로가기</a>
+				</div>
+				<div>
+					<a th:href="@{/member/mypage/info}"><span id="myCompanyName">[[${#authentication.principal.companyName}]]</span> ㅣ<span id="myName">[[${#authentication.principal.name}]]</span></a>
+				</div>
+				<form method="POST" th:action="@{/logout}">
+					<button class="custom light-blue">Logout</button>
+				</form>
+			</div>
+		</div>
+	</header>
+	<nav class="wrap flex-between">
+		<ul class="nav">
+			<li th:classappend="${menu=='user'}? active">
+				<a th:href="@{/member/user}">회원사 관리</a>
+			</li>
+			<li th:classappend="${menu=='sensorList'}? active">
+				<a th:href="@{/member/sensor/list}">센서 관리</a>
+			</li>
+			<li th:classappend="${menu=='sensorData'}? active">
+				<a th:href="@{/member/sensor/data}">데이터 검색</a>
+			</li>
+		</ul>
+		<div class="mb-30">
+			<button type="button" id="appDownBtn" class="btn dark-blue sm mr-10">APP 다운로드</button>
+			<button type="button" id="manuDownBtn" class="btn dark-blue sm">메뉴얼 다운로드</button>
+		</div>
+	</nav>
+	<script type="text/javascript">
+		let appDownBtn = document.getElementById("appDownBtn");
+		appDownBtn.onclick = function(){
+			location.href = "/common/down/AIotAdmin.apk";
+		}
+		
+		let manuDownBtn = document.getElementById("manuDownBtn");
+		manuDownBtn.onclick = function(){
+			location.href = "/common/down/member_manual.pdf";
+		}
+	</script>
+</th:block>
+
+</html>

@@ -1,0 +1,30 @@
+.excelBtn {
+	width: 150px;
+	height: 40px;
+	background-color: green;
+	color : white;
+}
+
+.select1 {
+     width: 289px;
+     height: 40px;
+     background: rgba(238, 238, 238, 0.5);
+     border: transparent;
+     border-radius: 5px;
+}
+
+.notAlarmBtn {
+	width: 150px;
+	height: 40px;
+	background: rgb(0, 152, 255);
+	color: white;
+	margin-left: 20px;
+}
+
+.alarmDelBtn {
+	width: 100px;
+	height: 30px;
+	background-color: red;
+	color: white;
+	margin-left: 20px;
+}

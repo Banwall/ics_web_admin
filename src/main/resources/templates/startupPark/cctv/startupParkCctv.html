@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+	<th:block th:replace="fragments/meta :: metaFragment(title='ICT-Cctv', useMetaCsrf='true')"></th:block>
+	<th:block th:replace="fragments/style :: styleFragment"></th:block>
+	<link rel="stylesheet" href="/resources/publish/css/cctv.css">
+	
+</head>
+
+<body>
+	<th:block th:replace="fragments/header-startupPark :: headerFragmentStartupPark(menu='cctv')"></th:block>
+	<th:block th:replace="manager/main/inc/incheonAirport :: incheonAirport"></th:block>
+	<th:block th:replace="manager/main/inc/busShelter :: busShelter"></th:block>
+	<main>
+		<div class="wrap" id="cctv">
+			<div class="card">
+				<div class="cctv-wrap">
+					<iframe src="http://192.168.240.15/main" frameborder="0"></iframe>
+				</div>
+			</div>
+		</div>
+	</main>
+	<th:block th:replace="fragments/footer-manager :: footerFragmentManager"></th:block>
+</body>
+	<th:block th:replace="fragments/script :: scriptFragment('true')"></th:block>
+	<script>
+		$(function() {
+			$(".startupPark").css("background-color", "rgba(255,192,0, 1)");
+			$(".incheon").css("background-color", "rgba(255,255,255, 0.15)");
+			$(".incheonAirport").css("background-color", "rgba(255,255,255, 0.15)");
+			$(".busShelter").css("background-color", "rgba(255,255,255, 0.15)");
+			$("#appDownBtn").hide();
+			$("#manuDownBtn").hide();
+		})
+	</script>
+</html>

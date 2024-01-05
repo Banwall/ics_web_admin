@@ -1,0 +1,160 @@
+@import 'variables', 'mixin';
+
+body {
+  background: transparent;
+}
+.header {
+  height: 16px;
+  background: $dark-blue;
+  width: 100%;
+}
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  height: 50px;
+  width: 100%;
+  background: $light-gray;
+  address {
+    line-height: 50px;
+    font-size: $fs;
+    color: rgba($color: #666, $alpha: 0.5);
+  }
+}
+@keyframes logo {
+  0% {
+    left: 50%;
+    transform: translate(-50%);
+    top: 224px;
+    width: 484px;
+  }
+  50% {
+    width: 200px;
+  }
+  100% {
+    left: 100px;
+    top: 96px;
+    transform: translate(0);
+    width: 200px;
+  }
+}
+@keyframes opacity {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+h1 {
+  position: absolute;
+  width: 484px;
+  left: 50%;
+  transform: translate(-50%);
+  top: 224px;
+  z-index: 2;
+  &.effect {
+    animation: logo 1.5s forwards;
+    cursor: pointer;
+  }
+  &.uneffect {
+    animation: logo 0.7s forwards reverse;
+  }
+}
+.slide-container {
+  width: 200%;
+  height: calc(100vh - 66px);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  left: 0%;
+  transition: 0.6s;
+}
+.login {
+  width: 50%;
+  height: 100%;
+  padding: 100px;
+  position: relative;
+  background: url('#{$root}/main-bg-x2.png') center center no-repeat;
+  background-size: cover;
+  .company-logo {
+    width: 250px;
+  }
+  .login-form {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    top: 488px;
+    > .id,
+    .password {
+      position: relative;
+      span {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        width: 12px;
+        svg {
+          pointer-events: none;
+        }
+        &.active {
+          path {
+            fill: $blue;
+          }
+        }
+      }
+    }
+    .id {
+      margin-bottom: 12px;
+    }
+    .password {
+      margin-bottom: $ms;
+    }
+  }
+}
+.join {
+  width: 1045px;
+  margin: 145px auto 0;
+  opacity: 0;
+  &.active {
+    animation: opacity 1s 1s forwards;
+  }
+  h2 {
+    text-align: center;
+    font-family: 'NanumSquareOTF';
+    font-size: 35px;
+    font-weight: 800;
+    color: $navy;
+    padding-bottom: 50px;
+    border-bottom: 1px solid rgba($color: $navy, $alpha: 0.1);
+    margin-bottom: 50px;
+  }
+  .id-check {
+    position: relative;
+    input {
+      width: 242px;
+    }
+    .error {
+      position: absolute;
+      bottom: -20px;
+      text-align: right;
+      right: 0;
+      font-size: $fs;
+      color: $red;
+    }
+  }
+  .notice {
+    padding: 18px 20px;
+    background: rgba($color: $light-gray, $alpha: 0.5);
+    border-radius: 5px;
+    h4 {
+      font-size: 13px;
+      font-weight: $bold;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 13px;
+    }
+  }
+}

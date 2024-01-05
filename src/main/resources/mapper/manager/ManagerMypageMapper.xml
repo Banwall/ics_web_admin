@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ics.manager.mypage.ManagerMypageMapper">
+	
+	<select id="getMyCompanyInfo" parameterType="Integer" resultType="ics.manager.mypage.dto.MyCompanyInfoResDTO">
+	<![CDATA[
+		select 
+			  company.company_name as 'companyName'
+			, company.company_email as 'companyEmail'
+			, company.company_phone as 'companyPhone'
+			, company.company_address as 'companyAddress'
+			, ifnull(company.president_name,'') as 'companyPresidentName'
+		from 
+			company
+		where
+				company.use_yn = 'Y'
+			and company.idx = #{companyIdx}
+	]]>
+	</select>
+	
+	<select id="getMyInfo" parameterType="Integer" resultType="ics.manager.mypage.dto.MyInfoResDTO">
+	<![CDATA[
+		select 
+			  member.idx as 'memberIdx'
+			, member.member_id as 'memberId'
+			, ifnull(member.dept_name, '') as 'memberDeptName'
+			, member.member_name as 'memberName'
+			, ifnull(member.rank, '') as 'memberRank'
+			, date_format(member.create_date, '%Y-%m-%d %H:%i:%s') as 'memberCreateDate'
+			, ifnull(member.member_email, '') as 'memberEmail'
+			, ifnull(member.member_tel, '') as 'memberTel'
+		from member 
+			where member.idx = #{memberIdx}
+	]]>
+	</select>
+	
+	<select id="getMyMemberList" parameterType="Integer" resultType="ics.manager.mypage.dto.MyMeberListResDTO">
+	<![CDATA[
+		select 
+			  member.idx as 'memberIdx'
+			, member.member_id as 'memberId'
+			, ifnull(member.dept_name, '') as 'memberDeptName'
+			, member.member_name as 'memberName'
+			, ifnull(member.rank, '') as 'memberRank'
+			, date_format(member.create_date, '%Y-%m-%d %H:%i:%s') as 'memberCreateDate'
+			, ifnull(member.member_email, '') as 'memberEmail'
+			, ifnull(member.member_tel, '') as 'memberTel'
+		from member 
+		where 
+			member.company_idx = #{companyIdx}
+			and member.use_yn = 'Y'
+			and member.member_approval_status = 'Y'
+			
+	]]>
+	</select>
+	
+	<update id="companyModProc" parameterType="ics.manager.mypage.dto.ManagerCompanyModReqDTO">
+	<![CDATA[
+		update
+			company
+		set
+			  company_email = #{companyEmail}
+			, company_phone = #{companyPhone}
+			, president_name = #{companyPresidentName}
+			, modifier = #{modifier}
+			, modify_date = now()
+		where
+			company.idx = #{companyIdx}
+	]]>
+	</update>	
+	
+	<update id="myInfoModProc" parameterType="ics.manager.mypage.dto.MyInfoModProcReqDTO">
+	<![CDATA[
+		update
+			member
+		set
+			  member_name = #{memberName}
+			, member_tel = #{memberTel}
+			, member_email = #{memberEmail}
+			, member.rank = #{memberRank}
+			, dept_name = #{memberDeptName}		
+		where
+			member.idx = #{memberIdx}
+	]]>
+	</update>	
+	
+	<update id="myInfoPwdModProc" parameterType="ics.manager.mypage.dto.MyInfoPwdModProcReqDTO">
+	<![CDATA[
+		update
+			member
+		set
+			member_pw = #{encMemberPwd}
+		where
+			member.idx = #{memberIdx}
+	]]>
+	</update>			
+	
+</mapper>

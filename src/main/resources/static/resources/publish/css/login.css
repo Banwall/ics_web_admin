@@ -1,0 +1,225 @@
+body {
+  background: transparent;
+}
+
+.header {
+  height: 16px;
+  background: #096eb2;
+  width: 100%;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  height: 50px;
+  width: 100%;
+  background: #eee;
+}
+
+.footer address {
+  line-height: 50px;
+  font-size: 12px;
+  color: rgba(102, 102, 102, 0.5);
+}
+
+@-webkit-keyframes logo {
+  0% {
+    left: 50%;
+    -webkit-transform: translate(-50%);
+            transform: translate(-50%);
+    top: 224px;
+    width: 484px;
+  }
+  50% {
+    width: 200px;
+  }
+  100% {
+    left: 100px;
+    top: 96px;
+    -webkit-transform: translate(0);
+            transform: translate(0);
+    width: 200px;
+  }
+}
+
+@keyframes logo {
+  0% {
+    left: 50%;
+    -webkit-transform: translate(-50%);
+            transform: translate(-50%);
+    top: 224px;
+    width: 484px;
+  }
+  50% {
+    width: 200px;
+  }
+  100% {
+    left: 100px;
+    top: 96px;
+    -webkit-transform: translate(0);
+            transform: translate(0);
+    width: 200px;
+  }
+}
+
+@-webkit-keyframes opacity {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes opacity {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+h1 {
+  position: absolute;
+  width: 484px;
+  left: 50%;
+  -webkit-transform: translate(-50%);
+          transform: translate(-50%);
+  top: 224px;
+  z-index: 2;
+}
+
+h1.effect {
+  -webkit-animation: logo 1.5s forwards;
+          animation: logo 1.5s forwards;
+  cursor: pointer;
+}
+
+h1.uneffect {
+  animation: logo 0.7s forwards reverse;
+}
+
+.slide-container {
+  width: 200%;
+  height: calc(100vh - 66px);
+  position: relative;
+  overflow: hidden;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  left: 0%;
+  -webkit-transition: 0.6s;
+  transition: 0.6s;
+}
+
+.login {
+  width: 50%;
+  height: 100%;
+  padding: 100px;
+  position: relative;
+  background: url("/resources/publish/images/main-bg-x2.png") center center no-repeat;
+  background-size: cover;
+}
+
+.login .company-logo {
+  width: 250px;
+}
+
+.login .login-form {
+  position: absolute;
+  left: 50%;
+  -webkit-transform: translate(-50%);
+          transform: translate(-50%);
+  top: 488px;
+}
+
+.login .login-form > .id,
+.login .login-form .password {
+  position: relative;
+}
+
+.login .login-form > .id span,
+.login .login-form .password span {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  cursor: pointer;
+  width: 12px;
+}
+
+.login .login-form > .id span svg,
+.login .login-form .password span svg {
+  pointer-events: none;
+}
+
+.login .login-form > .id span.active path,
+.login .login-form .password span.active path {
+  fill: #009cde;
+}
+
+.login .login-form .id {
+  margin-bottom: 12px;
+}
+
+.login .login-form .password {
+  margin-bottom: 10px;
+}
+
+.join {
+  width: 1045px;
+  margin: 145px auto 0;
+  opacity: 0;
+}
+
+.join.active {
+  -webkit-animation: opacity 1s 1s forwards;
+          animation: opacity 1s 1s forwards;
+}
+
+.join h2 {
+  text-align: center;
+  font-family: 'NanumSquareOTF';
+  font-size: 35px;
+  font-weight: 800;
+  color: #002664;
+  padding-bottom: 25px;
+  border-bottom: 1px solid rgba(0, 38, 100, 0.1);
+  margin-bottom: 25px;
+}
+
+.join .id-check {
+  position: relative;
+}
+
+.join .id-check input {
+  width: 242px;
+}
+
+.join .id-check .error {
+  position: absolute;
+  bottom: -20px;
+  text-align: right;
+  right: 0;
+  font-size: 12px;
+  color: #ff0000;
+}
+
+.join .notice {
+  padding: 10px 20px;
+  background: rgba(238, 238, 238, 0.5);
+  border-radius: 5px;
+}
+
+.join .notice h4 {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.join .notice p {
+  font-size: 13px;
+}

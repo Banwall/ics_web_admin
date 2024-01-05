@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<th:block th:fragment="busShelter">
+	<th:block th:replace="fragments/loding :: loadingFragment"></th:block>
+	<body>
+		<div class="wrap" id="busShelter" style="display: none;">
+			<div class="card" style="height:1000px;">
+				<div class="cctv-wrap" style="height:1000px;">
+					<!--<iframe style="width:100%; height:100%;" src="http://10.102.10.181/dashboardGroups/3800b3b0-be85-11eb-a69d-03714b68a651/c03b21c0-d80c-11eb-a69d-03714b68a651?state=W3siaWQiOiJkZWZhdWx0IiwicGFyYW1zIjp7ImVudGl0eUlkIjp7ImVudGl0eVR5cGUiOiJBU1NFVCIsImlkIjoiY2ZkOTYzNDAtYTk4Zi0xMWViLWJkMGMtMGZmMjM4NWRlYjk2In0sImVudGl0eU5hbWUiOiLsnbjsspzsiqTtg4Dtirjsl4XtjIztgawiLCJlbnRpdHlMYWJlbCI6IuyduOyynOyKpO2DgO2KuOyXhe2MjO2BrCJ9fSx7ImlkIjoic3RhdGVfc2hlbHRlcj" frameborder="0"></iframe>-->
+					<img style="width:100%; height:98%;" src="/resources/publish/images/busShelter.png" alt="">
+				</div>
+			</div>
+		</div>
+	</body>
+	
+	<script type="text/JavaScript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script type="text/JavaScript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+	
+	<script th:inline="javascript">
+		
+	</script>
+</th:block>
+</html>

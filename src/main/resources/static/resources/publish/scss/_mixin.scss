@@ -1,0 +1,72 @@
+@mixin font($s: 14px, $w:normal, $c:null, $f:null){
+  font-size: $s;
+  font-weight: $w;
+  font-family: $f;
+  color : $c;
+}
+@mixin size($w:100%, $h:100%){
+width: $w;
+height: $h;
+}
+@mixin position($t:null ,$l:null, $p:absolute, $r:null ,$b:null){
+position: $p;
+top: $t;
+left: $l;
+right: $r;
+bottom: $b;
+}
+@mixin flex ($j:space-between, $a:center, $d:null){
+display: flex;
+justify-content: $j;
+align-items : $a;
+flex-direction: $d;
+}
+@mixin border($c){
+  border: 1px 1px solid $c;
+}
+@mixin center{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%)
+}
+
+@function rem($s){
+  @return $s/16 +rem;
+}
+@function em($s, $b){
+  @return $s/$b +em;
+}
+@function vw($s){
+  @return $s/19.2 +vw;
+}
+@function vh($s){
+  @return $s/10.24 +vh;
+}
+@function vwt($s) {
+  @return $s/10.4+vw;
+}
+@mixin ellipse{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+@mixin after(){
+  content:'';
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left:0;
+  top: 0;
+}
+
+@mixin bg(){
+  position:absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,.9);
+  left: 0;
+  top: 0;
+}

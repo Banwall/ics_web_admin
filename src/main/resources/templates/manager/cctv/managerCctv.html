@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+	<th:block th:replace="fragments/meta :: metaFragment(title='ICT-Cctv', useMetaCsrf='true')"></th:block>
+	<th:block th:replace="fragments/style :: styleFragment"></th:block>
+	<link rel="stylesheet" href="/resources/publish/css/cctv.css">
+	
+</head>
+
+<body>
+	<th:block th:replace="fragments/header-manager :: headerFragmentManager(menu='cctv')"></th:block>
+	<th:block th:replace="manager/main/inc/incheonAirport :: incheonAirport"></th:block>
+	<main>
+		<div class="wrap" id="cctv">
+			<div class="card">
+				<div class="cctv-wrap">
+					<iframe src="http://192.168.240.15/main" frameborder="0"></iframe>
+				</div>
+			</div>
+		</div>
+	</main>
+	<th:block th:replace="fragments/footer-manager :: footerFragmentManager"></th:block>
+</body>
+	<th:block th:replace="fragments/script :: scriptFragment('true')"></th:block>
+</html>

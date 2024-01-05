@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ics.startuppark.user.StartupParkUserMapper">
+
+	<select id="getCompanyApprovalList" parameterType="String" resultType="ics.startuppark.user.dto.CompanyApprovalListResDTO">
+	<![CDATA[
+		select 
+			  company.idx as 'companyIdx'
+			, company.company_name as 'companyName'
+			, company.approval_status as 'companyApprovalStatus'
+			, case when company.approval_date != null then date_format(company.approval_date, '%Y-%m-%d %H:%i:%s') else '' end as 'companyApprovalDate'
+			, company.company_role as 'companyRole'
+		from 
+			company
+		INNER JOIN company_station cs
+			ON cs.company_idx = company.idx
+			AND cs.station_number = '0001'
+		where 
+			company.use_yn = 'Y'
+	]]>
+		<if test="roleSearchType == 0">
+			
+		</if>
+		
+		<if test="roleSearchType == 1">
+			and company.company_role != 'ROLE_A'	
+		</if>
+
+		<if test="roleSearchType == 2">
+			and company.company_role = 'ROLE_O'	
+		</if>		
+		
+		<if test="roleSearchType == 3">
+			and company.company_role = 'ROLE_M'
+		</if>
+		
+		<if test="roleSearchType == 4">
+			and company.company_role != 'ROLE_A'
+			and company.approval_status = 'Y'
+		</if>
+	</select> 
+	
+	<select id="getCompanyInfo" parameterType="Integer" resultType="ics.startuppark.user.dto.CompanyResDTO">
+	<![CDATA[
+		select 
+			  company.idx as 'companyIdx'
+			, date_format(company.create_date, '%Y-%m-%d %H:%i:%s') as 'companyCreateDate'
+			, company.company_name as 'companyName'
+			, company.company_role as 'companyRole'
+			, company.company_email as 'companyEmail'
+			, company.company_phone as 'companyPhone'
+			, company.company_address as 'companyAddress'
+			, company.company_url as 'companyUrl'
+			, ifnull(company.company_regist_number, '') as 'companyRegistNumber'
+			, ifnull(company.president_name,'') as 'companyPresidentName'
+			, case when company.approval_date != null then date_format(company.approval_date, '%Y-%m-%d %H:%i:%s') else '' end as 'companyApprovalDate'
+			, (select count(sensor.idx) from sensor where company.idx = sensor.company_idx and sensor.use_yn = 'Y') as 'sensorCount'
+			, company.approval_status as 'companyApprovalStatus' 
+		from 
+			company
+		where
+				company.use_yn = 'Y'
+			and company.idx = #{companyIdx}
+	]]>
+	</select>
+	
+	<select id="getMemberUseCount" parameterType="Integer" resultType="Integer">
+	<![CDATA[
+		select count(*) as 'cnt' from member where member.use_yn = 'Y' 
+		and company_idx = #{companyIdx}
+	]]>
+	</select>
+	
+	<select id="getMemberList" parameterType="ics.startuppark.user.dto.MemberSearchReqDTO" resultType="ics.startuppark.user.dto.MemberSearchResDTO">
+	<![CDATA[
+		select 
+			*
+		from (
+			select
+				 @rownum:=@rownum+1 as rowNum
+				, member.idx as 'memberIdx'
+				, member.member_id as 'memberId'
+				, ifnull(member.dept_name, '') as 'memberDeptName'
+				, ifnull(member.member_name, '') as 'memberName'
+				, ifnull(member.rank, '') as 'memberRank'
+				, date_format(member.create_date, '%Y-%m-%d %H:%i:%s') as 'memberCreateDate'
+				, ifnull(member.member_email, '') as 'memberEmail'
+				, ifnull(member.member_tel, '') as 'memberTel'
+			from 
+				( select @rownum := 0) r , member
+			where
+					use_yn = 'Y'
+				and member.company_idx = #{companyIdx}
+		) t
+		
+			
+	]]>
+	</select>
+	
+	
+	
+</mapper>

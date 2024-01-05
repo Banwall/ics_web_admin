@@ -1,0 +1,111 @@
+#mypage {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 977px 733px;
+      grid-template-columns: 977px 733px;
+  -ms-grid-rows: 336px 463px;
+      grid-template-rows: 336px 463px;
+  gap: 20px 10px;
+      grid-template-areas: 'card0 card1' 'card2 card1';
+}
+
+#mypage.operator {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 977px 733px;
+      grid-template-columns: 977px 733px;
+  -ms-grid-rows: 810px;
+      grid-template-rows: 810px;
+  gap: 10px;
+      grid-template-areas: 'card0 card1';
+}
+
+#mypage.operator > .card > .member-info li:first-child {
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+}
+
+#mypage.operator > .card > .member-info li:first-child > div:first-child {
+  margin-right: 14px;
+}
+
+#mypage > div:nth-child(1) {
+  -ms-grid-row: 1;
+  -ms-grid-column: 1;
+  grid-area: card0;
+}
+
+#mypage > div:nth-child(2) {
+  -ms-grid-row: 1;
+  -ms-grid-column: 2;
+  grid-area: card1;
+}
+
+#mypage > div:nth-child(3) {
+  -ms-grid-row: 2;
+  -ms-grid-column: 1;
+  grid-area: card2;
+}
+
+#mypage > div:nth-child(4) {
+  grid-area: card3;
+}
+
+#mypage > div:nth-child(5) {
+  grid-area: card4;
+}
+
+#mypage > div:nth-child(6) {
+  grid-area: card5;
+}
+
+#mypage > div:nth-child(7) {
+  grid-area: card6;
+}
+
+#mypage > div:nth-child(8) {
+  grid-area: card7;
+}
+
+#mypage > div:nth-child(9) {
+  grid-area: card8;
+}
+
+#mypage input,
+#mypage .select {
+  width: 289px;
+}
+
+.card:nth-child(2) .button-container {
+  right: 20px;
+  bottom: 20px;
+}
+
+.card .button-container {
+  right: 40px;
+  bottom: 20px;
+}
+
+.card h3 {
+  padding: 10px;
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.card .flex-between {
+  margin-bottom: 10px;
+}
+
+.card .flex-between .input-box {
+  margin-bottom: 0;
+}
+
+.card .flex-between h3 {
+  margin-bottom: 0;
+}
+
+.card .flex-between .select {
+  width: 133px;
+}

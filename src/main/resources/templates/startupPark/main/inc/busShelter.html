@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<th:block th:fragment="busShelter">
+	<th:block th:replace="fragments/loding :: loadingFragment"></th:block>
+	<body>
+		<div class="wrap" id="busShelter" style="display: none;">
+			<embed type="text/html" src="https://incheon-airport.watchmile.com/dashboard/index.html" width="1720" height="750">
+		</div>
+	</body>
+	
+	<script type="text/JavaScript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script type="text/JavaScript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+	
+	<script th:inline="javascript">
+		
+	</script>
+</th:block>
+</html>

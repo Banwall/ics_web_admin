@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ics.batch.BatchAlarmMapper">
+
+	<select id="getAlarmLogList" parameterType="Integer" resultType="ics.batch.dto.BatchAlarmLogListDTO">
+	<![CDATA[
+		with alarmLog as (
+		select 
+			  idx as 'alarmIdx'
+			, sensor_idx as 'sensorIdx'
+			, message as 'alarmMessage'
+			, date_format(create_date, '%Y-%m-%d %H:%i:%s') as 'alarmCreateDate'
+		from alarm
+		where
+			alarm.del_yn = 'N'
+			and alarm.send_yn != 'P'
+			and date_format(alarm.create_date, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d')
+		) select 
+			  alarmIdx
+			, sensorIdx
+			, alarmMessage
+			, sensor.location_description as 'sensorLocationDescription'
+			, sensor.threshold as 'sensorThreshold'
+			, sensor_type.sensor_type_name as 'sensorTypeName'
+			, sensor_type.sensor_type_code as 'sensorTypeCode'
+			, station.station_name as 'stationName'
+			, alarmCreateDate
+		from 
+		alarmLog 
+		inner join sensor
+			on alarmLog.sensorIdx = sensor.idx
+		inner join sensor_type
+			on sensor.sensor_type_idx  = sensor_type.idx 
+		left outer join station
+			on sensor.station_idx = station.idx			
+		where 
+			sensor.sensor_approval_status = 'Y'
+			and sensor.use_yn = 'Y'
+			and sensor.alarm_yn = 'Y'
+			and sensor.company_idx = #{companyIdx}		
+	]]>
+	</select>
+	
+	<select id="getAlarmMemberList" parameterType="Integer" resultType="ics.batch.dto.BatchAlarmMemberListDTO">
+	<![CDATA[
+		select 
+			  member_id as 'memberId'
+			, mobile_token as 'mobileToken'
+		from member
+		where
+			member.member_approval_status = 'Y'
+			and member.use_yn = 'Y'
+			and ifnull(member.mobile_token, '') != ''
+			and ifnull(alarm_yn, 'N') = 'Y'
+			and member.company_idx = #{companyIdx}
+	]]>
+	</select>	
+	
+	<update id="alarmStatudUpdate" parameterType="Integer">
+	<![CDATA[
+		update
+			alarm
+		set
+			send_yn = 'P'
+		where
+			idx = #{alarmIdx}	
+	]]>
+	</update>
+</mapper>

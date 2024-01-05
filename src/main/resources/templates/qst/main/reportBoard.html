@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+	<!--<th:block th:replace="/qst/layout/style :: styleFragment"></th:block>-->
+	<th:block th:replace="fragments/meta :: metaFragment(title='ICT-Main', useMetaCsrf='true')"></th:block>
+	<th:block th:replace="fragments/style :: styleFragment"></th:block>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
+
+	<link rel="stylesheet" href="/resources/publish/css/main.css">
+	<link rel="stylesheet" href="/qst/css/lib/grid/mermaid.min.css">
+	<link rel="stylesheet" href="/qst/css/app/main/popup.css">
+	<link rel="stylesheet" href="/qst/css/app/main/main.css">
+</head>
+<body style="background-color: #eeeeee">
+	<th:block th:replace="fragments/header-manager :: headerFragmentManager(menu='main')"></th:block>
+	<th:block th:replace="manager/main/inc/incheonAirport :: incheonAirport"></th:block>
+	<main class="qstDiv" style="padding-bottom: 0px !important;">
+		<div class="wrap mt20" style="display: flex;">
+			<div class="card ml10" style="width: 100%; height: 815px;">
+				<h1 style="text-align: center; font-weight: bold;">정기 점검 보고서</h1>
+				<div class="tableDiv">
+					<table id="reportBoardTable" class="table table-striped">
+						<thead>
+							<tr>
+								<th>NO</th>
+								<th>제목</th>
+								<th>작성자</th>
+								<th>작성일자</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:if="${boardList.size() == 0}">
+								<td colspan="4">
+									<span>등록된 게시물이 없습니다.</span>
+								</td>
+							</tr>
+							<tr th:unless="${boardList.size() == 0}" th:each="board : ${boardList}">
+								<td>
+									<span th:text="${board.idx}"></span>
+								</td>
+								<td style="cursor: pointer;">
+									<span th:text="${board.title}"></span>
+									<input type="hidden" id="idx" th:value="${board.idx}">
+								</td>
+								<td>
+									<span th:text="${board.writer}"></span>
+								</td>
+								<td>
+									<span th:text="${#strings.substring(board.cdt, 0, 19)}"></span>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<button id="boardWriteBtnGet" style="position: relative; left: 1305px; margin-top: 35px !important;">글쓰기</button>
+			</div>
+		</div>
+	</main>
+</body>
+<th:block th:replace="fragments/script :: scriptFragment('true')"></th:block>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+<script type="text/JavaScript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script type="text/JavaScript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="/qst/js/app/main/board.js"></script>
+
+<script th:inline="javascript">
+
+</script>
+</html>

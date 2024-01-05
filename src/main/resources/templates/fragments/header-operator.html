@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<th:block th:fragment="headerFragmentOperator(menu)">
+	<th:block th:replace="fragments/loding :: loadingFragment"></th:block>
+	<header>
+		<div class="wrap">
+			<h1>
+				<!--<img src="/resources/publish/images/logo.png" alt="">-->
+				<img src="/resources/publish/images/new-logo.png" alt="">
+			</h1>
+			<div class="title incheon">
+				<p>인천대입구역</p>
+			</div>
+			
+			<div class="user">
+				<div>
+					<a th:href="@{/operator/mypage/info}"><span id="myCompanyName">[[${#authentication.principal.companyName}]]</span> ㅣ<span id="myName">[[${#authentication.principal.name}]]</span></a>
+				</div>
+				<form method="POST" th:action="@{/logout}">
+					<button class="custom light-blue">Logout</button>
+				</form>
+			</div>
+		</div>
+	</header>
+	<nav class="wrap flex-between header-nav">
+		<ul class="nav">
+			<li class="test" th:classappend="${menu=='main'}? active">
+				<a class="test" th:href='@{/operator/main}'>대시보드</a>
+			</li>
+			<li th:classappend="${menu=='sensorList'}? active">
+				<a th:href="@{/operator/sensor/list}">센서 관리</a>
+			</li>
+			<li th:classappend="${menu=='sensorData'}? active">
+				<a th:href="@{/operator/sensor/data}">데이터 검색</a>
+			</li>
+			<li th:classappend="${menu=='cctv'}? active">
+				<a th:href='@{/operator/cctv}'>CCTV</a>
+			</li>
+		</ul>
+		<div class="mb-30">
+			<button type="button" id="appDownBtn" class="btn dark-blue sm mr-10">APP 다운로드</button>
+			<button type="button" id="manuDownBtn" class="btn dark-blue sm">메뉴얼 다운로드</button>
+		</div>
+	</nav>
+	
+	<script type="text/JavaScript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script type="text/JavaScript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+	
+	<script th:inline="javascript">
+		let appDownBtn = document.getElementById("appDownBtn");
+		appDownBtn.onclick = function () {
+			location.href = "/common/down/AIotAdmin.apk";
+		}
+
+		let manuDownBtn = document.getElementById("manuDownBtn");
+		manuDownBtn.onclick = function () {
+			location.href = "/common/down/operator_manual.pdf";
+		}
+	</script>
+</th:block>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+	<th:block th:replace="fragments/meta :: metaFragment(title='ICT-Cctv', useMetaCsrf='true')"></th:block>
+	<th:block th:replace="fragments/style :: styleFragment"></th:block>
+	<link rel="stylesheet" href="/resources/publish/css/cctv.css">
+</head>
+
+<body>
+	<th:block th:replace="fragments/header-operator :: headerFragmentOperator(menu='cctv')"></th:block>
+	<main>
+		<div class="wrap operator" id="cctv">
+			<div class="card">
+				<div class="flex-between mb-15">
+					<h3>CCTV 목록</h3>
+					<div class="select" id="cctvSelect">
+						<input id="cctvInput" type="text" class="custom" th:data-station-idx="${stationList[0].stationIdx}" th:value="${stationList[0].stationName}" readonly="readonly">
+						<ul class="select-dropdown">
+							<th:block th:each="list : ${stationList}">
+								<li th:data-station-idx="${list.stationIdx}" class='stationListLi'>[[${list.stationName}]]</li>
+							</th:block> 							
+							<!--<li>전체보기</li>
+							<li>인천대입구역</li>
+							<li>인천대입구역</li>
+							<li>인천대입구역</li>
+							<li>인천대입구역</li>-->
+						</ul>
+					</div>
+				</div>
+				<ul class="member-list" id="cctvListUl">
+					<th:block th:if="${cctvList.size == 0}">
+						<li class="active cctvListLi" data-cctv-idx='0' data-cctv-ws=''> 조회된 데이터가 없습니다</li>
+					</th:block>
+					<th:block th:if="${cctvList.size != 0}">
+						<th:block th:each="list : ${cctvList}">
+							<li th:data-cctv-ws="${list.cctvWs}" th:data-cctv-idx="${list.cctvIdx}" class='cctvListLi'>[[${list.cctvLocation}]]</li>
+						</th:block>
+					</th:block>
+					
+					<!--<li class="active">
+						<div class="memberName">CCTV1</div>
+						<div>인천대입구역 2번 출입구 앞</div>
+					</li>
+					<li class="">
+						<div class="memberName">CCTV2</div>
+						<div>인천대입구역 2번 출입구 앞</div>
+					</li>
+					<li class="">
+						<div class="memberName">CCTV3</div>
+						<div>인천대입구역 2번 출입구 앞</div>
+					</li>
+					<li class="">
+						<div class="memberName">CCTV4</div>
+						<div>인천대입구역 2번 출입구 앞</div>
+					</li>
+					<li class="">
+						<div class="memberName">CCTV5</div>
+						<div>인천대입구역 2번 출입구 앞</div>
+					</li>-->
+			</div>
+			<div class="card">
+				<div class="cctv-wrap" id="cctvArea">
+					<canvas class="jsmpeg" data-url=''></canvas>
+				</div>
+			</div>
+		</div>
+	</main>
+	<th:block th:replace="fragments/footer-operator :: footerFragmentOperator"></th:block>
+</body>
+	<th:block th:replace="fragments/script :: scriptFragment('true')"></th:block>
+	<script src="https://jsmpeg.com/jsmpeg.min.js"></script>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jsmpeg/0.1/jsmpg.js"></script>-->
+    <script th:src="@{/resources/ics/common/js/string.js}"></script>
+    <script th:src="@{/resources/ics/operator/js/operatorCctv.js}"></script>	
+</html>

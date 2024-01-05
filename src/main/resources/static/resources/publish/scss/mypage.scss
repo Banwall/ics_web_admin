@@ -1,0 +1,69 @@
+@import 'variables', 'mixin';
+
+#mypage {
+  display: grid;
+  grid-template-columns: 977px 733px;
+  grid-template-rows: 336px 463px;
+  gap: 20px 10px;
+  grid-template-areas:
+    'card0 card1'
+    'card2 card1';
+  &.operator {
+    display: grid;
+    grid-template-columns: 977px 733px;
+    grid-template-rows: 810px;
+    gap: 10px;
+    grid-template-areas: 'card0 card1';
+    > .card {
+      > .member-info {
+        li:first-child {
+          justify-content: flex-start;
+          > div:first-child {
+            margin-right: 14px;
+          }
+        }
+      }
+    }
+  }
+  > div {
+    @for $i from 0 to 9 {
+      &:nth-child(#{$i + 1}) {
+        grid-area: card#{$i};
+      }
+    }
+  }
+  input,
+  .select {
+    width: 289px;
+  }
+}
+.card {
+  &:nth-child(2) {
+    .button-container {
+      right: 20px;
+      bottom: 20px;
+    }
+  }
+  .button-container {
+    right: 40px;
+    bottom: 20px;
+  }
+  h3 {
+    padding: $ms;
+    font-weight: $bold;
+    font-size: $fn;
+    margin-bottom: $ms;
+  }
+  .flex-between {
+    margin-bottom: $ms;
+    .input-box {
+      margin-bottom: 0;
+    }
+    h3 {
+      margin-bottom: 0;
+    }
+    .select {
+      width: 133px;
+    }
+  }
+}

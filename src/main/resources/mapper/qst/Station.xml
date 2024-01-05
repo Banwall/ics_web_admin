@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		
+<mapper namespace="ics.qst.mapper.StationMapper">
+
+	<select id="getStationList" resultType="ics.qst.vo.Station">
+		SELECT
+			idx
+		,	route_number AS routeNumber
+		,	station_number AS stationNumber
+		,	station_name AS stationName
+		FROM station
+		WHERE station_number NOT IN ('0000')
+	</select>
+
+</mapper>

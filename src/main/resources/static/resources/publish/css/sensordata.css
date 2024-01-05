@@ -1,0 +1,84 @@
+#sensordata {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 100%;
+      grid-template-columns: 100%;
+  -ms-grid-rows: 773px 660px;
+      grid-template-rows: 773px 660px;
+  gap: 10px;
+}
+
+.chart-wrap {
+  padding: 10px;
+}
+
+.search-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.search-container .search-option {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.search-container .search-option input,
+.search-container .search-option .select {
+  width: 289px;
+}
+
+.search-container .search-option button.custom {
+  height: 40px;
+  padding: 0 20px;
+}
+
+.search-container .search-option span {
+  padding: 0 10px;
+}
+
+.data-table {
+  padding-left: 10px;
+}
+
+.data-table .table-wrap {
+  overflow-y: scroll;
+  max-height: 568px;
+}
+
+.data-table table {
+  width: 100%;
+  text-align: left;
+  text-indent: 30px;
+}
+
+.data-table table tr td,
+.data-table table tr th {
+  border: 1px solid rgba(127, 127, 127, 0.2);
+  line-height: 48px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.data-table table tr th {
+  background: #eee;
+  font-size: 16px;
+  font-weight: 500;
+  color: #002664;
+}

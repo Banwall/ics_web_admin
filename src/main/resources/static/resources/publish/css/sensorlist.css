@@ -1,0 +1,171 @@
+#sensorList {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 355px 673px 673px;
+      grid-template-columns: 355px 673px 673px;
+  -ms-grid-rows: 810px;
+      grid-template-rows: 810px;
+  gap: 10px;
+}
+
+#sensorList.member {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 673px 1037px;
+      grid-template-columns: 673px 1037px;
+  -ms-grid-rows: 810px;
+      grid-template-rows: 810px;
+  gap: 10px;
+}
+
+.member-list {
+  height: 700px;
+}
+
+.card h3 {
+  padding: 10px;
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.card .flex-between {
+  margin-bottom: 10px;
+}
+
+.card .flex-between h3 {
+  margin-bottom: 0;
+}
+
+.card .flex-between .select {
+  width: 133px;
+}
+
+.sensor-detail-info {
+  position: relative;
+  height: 380px;
+}
+
+.sensor-detail-info > ul {
+  padding: 10px;
+}
+
+.sensor-detail-info > ul li {
+  border-radius: 5px;
+  background: rgba(238, 238, 238, 0.5);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 58px;
+  padding: 0 30px;
+  margin-bottom: 10px;
+}
+
+.sensor-detail-info > ul li:last-child {
+  margin-bottom: 0;
+}
+
+.sensor-detail-info > ul li div {
+  font-size: 12px;
+  color: #7f7f7f;
+}
+
+.sensor-detail-info > ul li div:first-child {
+  font-size: 14px;
+  font-weight: 500;
+  color: #000;
+}
+
+.sensor-detail-info .pagination {
+  bottom: 10px;
+}
+
+.sensor-detail-chart {
+  padding: 0 10px;
+}
+
+.sensor-detail-chart .chart-wrap {
+  width: 100%;
+  height: 286px;
+}
+
+.operator-sensor-detail {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  height: 730px;
+  padding: 10px;
+}
+
+.operator-sensor-detail .sensor-detail-info {
+  height: 100%;
+}
+
+.operator-sensor-detail .sensor-detail-info ul {
+  padding: 0;
+  width: 424px;
+  max-height: 628px;
+  overflow-y: scroll;
+}
+
+.operator-sensor-detail .sensor-detail-info .pagination {
+  bottom: 20px;
+}
+
+.operator-sensor-detail .sensor-detail-chart .chart-wrap {
+  width: 563px;
+}
+
+.member .card:nth-child(1) .sensor-list {
+  height: 620px;
+}
+
+.member .card:nth-child(1) .pagination {
+  bottom: 80px;
+}
+
+.member .card:nth-child(1) .button-container {
+  right: 30px;
+  bottom: 20px;
+}
+.sensor-table{
+	height: 330px;
+	overflow-y: scroll;
+	position:relative;
+}
+.sensor-table table{
+	width: 100%;
+	text-align: center;
+}
+.sensor-table table thead{
+	color: #fff;
+}
+.sensor-table table th{
+	width: 33.3%;
+	line-height: 36px;
+	background: #096eb2;
+}
+.sensor-table table tbody tr{
+	cursor:pointer;
+}
+.sensor-table table tbody tr:hover{
+	background:rgba(9, 110, 178, .3);
+	color: #fff;
+}
+.sensor-table table td{
+	line-height: 36px;
+	border-bottom: 1px solid #ccc;
+	font-size: 13px;
+}

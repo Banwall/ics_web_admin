@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5" >
+<head>
+	<th:block th:replace="fragments/meta :: metaFragment(title='ICT-User', useMetaCsrf='true')"></th:block>
+	<th:block th:replace="fragments/style :: styleFragment"></th:block>
+	<link rel="stylesheet" href="/resources/publish/css/user.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-notify@0.5.4/dist/simple-notify.min.css" />
+</head>
+<body>
+	<th:block th:replace="fragments/header-manager :: headerFragmentManager(menu='user')"></th:block>
+	<th:block th:replace="manager/main/inc/incheonAirport :: incheonAirport"></th:block>
+	<th:block th:replace="manager/main/inc/busShelter :: busShelter"></th:block>
+	<main>
+		<div class="wrap" id="user">
+			<div class="card">
+				<div class="flex-between mb-15">
+					<h3>실증수요기관 / 실증기업 목록</h3>
+					<div class="select" id="memberList">
+						<input type="text" class="custom" data-role-search-type="1" value="전체보기" readonly="readonly" id="roleInput">
+						<ul class="select-dropdown">
+							<li data-role-search-type='1'>전체보기</li>
+							<li data-role-search-type='2'>실증수요기관</li>
+							<li data-role-search-type='3'>실증기업</li>
+						</ul>
+					</div>
+				</div>
+				<ul class="member-list" id="memberListLi">
+					<th:block th:if="${companyApprovalList.size()==0}">
+						<li class="active noData">
+							<div class="">조회된 데이터가 없습니다</div>
+						</li>
+					</th:block>
+					<th:block th:if="${companyApprovalList.size()!=0}">
+						<th:block th:each="list : ${companyApprovalList}">
+							<li th:classappend="${listStat.index == 0 ? 'active' : ''}" th:data-company-idx="${list.companyIdx}" th:data-company-role="${list.companyRole}" th:data-company-status="${list.companyApprovalStatus}" th:data-company-name="${list.companyName}">
+								<div class="memberName">[[${list.companyName}]]</div>
+								<div th:classappend="${list.companyApprovalStatus=='Y'? 'agree' : 'dis-agree'}">[[${list.companyApprovalText}]] [[${list.companyApprovalDateText}]]</div>
+							</li>
+						</th:block>
+					</th:block>					
+					<!--<li>
+						<div class="memberName">삼성전자</div>
+						<div class="dis-agree">미승인 2021-10-19 (20:21)</div>
+					</li>
+					<li>
+						<div class="memberName">LG전자</div>
+						<div class="agree">승인 2021-10-19 (20:21)</div>
+					</li>
+					<li>
+						<div class="memberName">삼성전자</div>
+						<div class="dis-agree">미승인 2021-10-19 (20:21)</div>
+					</li>
+					-->
+				</ul>
+				<div class="button-container">
+					<button class="btn dark-blue" id="addCompanyModalBtn">신규 등록</button>
+				</div>
+			</div>
+			<div class="card">
+				<h3>실증수요기관 / 실증기업 정보</h3>
+				<ul class="member-info">
+					<li>
+						<div class="input-box">
+							<p><span style="color:red;">*</span> 실증기업 종류</p>
+							<div class="select  disabled" id="memberModSelect">
+								<input id="memberInfoInput" type="text" class="custom" data-role-search-type="2" value="실증수요기관" readonly="readonly">
+								<ul id="memberInfoUl" class="select-dropdown">
+									<!--<li data-role-search-type='1'>전체보기</li>-->
+									<li data-role-search-type='2'>실증수요기관</li>
+									<li data-role-search-type='3'>실증기업</li>
+								</ul>
+							</div>
+						</div>
+						<div class="input-box">
+							<p><span style="color:red;">*</span> 실증기업 이름</p>
+							<input id='infoCompanyName' type="text" class="custom" value="" readonly placeholder="실증기관 이름">
+						</div>
+					</li>
+				<!--	<li>
+						<div class="input-box">
+							<p>실증기업 아이디</p>
+							<input type="text" class="custom" value="koreasoft" readonly>
+						</div>
+						
+					</li>-->
+					<li>
+						<div class="input-box">
+							<p>대표자 이름</p>
+							<input id="infoCompanyPresidentName" type="text" class="custom" value="" readonly placeholder="대표자 이름" >
+						</div>
+						<div class="input-box">
+							<p><span style="color:red;">*</span> 대표 이메일 주소</p>
+							<input id="infoCompanyEmail" type="text" class="custom" value="" readonly placeholder="대표 이메일 주소">
+						</div>
+					</li>
+					<li>
+						<div class="input-box">
+							<p>사업자 등록번호</p>
+							<input id="infoCompanyRegistNumber" type="text" class="custom" value="" readonly placeholder="사업자 등록번호">
+						</div>
+						<div class="input-box">
+							<p>회사 전화번호</p>
+							<input id="infoCompanyPhone" type="text" class="custom" value="" placeholder="회사 전화번호" readonly>
+						</div>
+					</li>
+					<li>
+						<div class="input-box">
+							<p>회사 주소</p>
+							<input id="infoCompanyAddress" type="text" class="custom" value="" readonly placeholder="회사 주소">
+						</div>
+						<div class="input-box">
+							<p>회사 홈페이지</p>
+							<input id="infoCompanyUrl" type="text" class="custom" value="" readonly placeholder="회사 홈페이지">
+						</div>
+					</li>
+					<li class="line"></li>
+					<li>
+						<div class="input-box">
+							<p>등록 일자</p>
+							<input id="infoCompanyCreateDate" type="text" class="custom" value="" readonly>
+						</div>
+						<div class="input-box" style="display: block;">
+							<p>승인 일자</p>
+							<input id="infoCompanyApprovalDate" type="text" class="custom" value="" readonly>
+						</div>
+					</li>
+					<li>
+						<div class="input-box">
+							<p>등록된 센서 수</p>
+							<input id="infoSensorCount" type="text" class="custom" value="" readonly>
+						</div>
+					</li>
+					<!--<li style="display: none;">
+						<div class="input-box">
+							<p>가입 신청 일자</p>
+							<input type="text" class="custom" value="-" readonly>
+						</div>
+						<div class="input-box">
+							<p>승인 일자</p>
+							<input type="text" class="custom" value="-" readonly>
+						</div>
+					</li>-->
+				</ul>
+				<div class="button-container">
+					<button class="custom dark-blue" id="companyAgreeBtn">승인</button>
+					<button class="custom light-blue" id="companyDisAgreelBtn">미승인</button>
+					<button class="custom navy" id="companyModBtn">수정</button>
+					<button class="custom dark-blue" id="companySaveProcBtn" style="display: none;">저장</button>
+					<button class="custom gray" id="companyCancelBtn" style="display: none;">취소</button>
+					<button class="custom gray" id="companyDelBtn">삭제</button>
+				</div>
+			</div>
+			<div class="card">
+				<h3>회원 정보</h3>
+				<ul class="member-detail" id="memberInfoListUl">
+					<!--<li class="active">
+						<p>· 회원 아이디: gdhong1</p>
+						<p>· 부서: 영업부</p>
+						<p>· 회원 이름: 홍길동</p>
+						<p>· 직책: 과장</p>
+						<p>· 연락처: 010-0000-0000</p>
+						<p>· 등록 일자: 2022-02-07 (22:01)</p>
+						<p>· 이메일 주소: gdhong@gmail.com</p>
+						<span class="close"></span>
+					</li>
+					<li>
+						<p>· 회원 아이디: gdhong1</p>
+						<p>· 부서: 영업부</p>
+						<p>· 회원 이름: 홍길동</p>
+						<p>· 직책: 과장</p>
+						<p>· 연락처: 010-0000-0000</p>
+						<p>· 등록 일자: 2022-02-07 (22:01)</p>
+						<p>· 이메일 주소: gdhong@gmail.com</p>
+						<span class="close"></span>
+					</li>
+					<li>
+						<p>· 회원 아이디: gdhong1</p>
+						<p>· 부서: 영업부</p>
+						<p>· 회원 이름: 홍길동</p>
+						<p>· 직책: 과장</p>
+						<p>· 연락처: 010-0000-0000</p>
+						<p>· 등록 일자: 2022-02-07 (22:01)</p>
+						<p>· 이메일 주소: gdhong@gmail.com</p>
+						<span class="close"></span>
+					</li>-->
+					
+				</ul>
+				<div class="button-container">
+					<button class="custom dark-blue" id="addMemberModalBtn">등록</button>
+					<button class="custom navy" id="modifyModalBtn">수정</button>
+					<button class="custom light-blue" id="pwdModalBtn">비밀번호 변경</button>
+				</div>
+			</div>
+		</div>
+	</main>
+	
+	
+	<article class="modal" id="agreeModal" style="z-index: 100;">
+		<div class="modal-wrap">
+			<div class="modal-head">
+				<h2 id="agreeHeader">
+					<!--실증기업 승인 여부-->
+				</h2>
+				<span class="close">
+					<img src="/resources/publish/images/close.svg" alt="">
+				</span>
+			</div>
+			<div class="modal-body">
+				<p class="mb-30" id="agreeText">
+					<!--<span>"LG전자"</span>을(를)<br>
+					<b>승인</b>하시겠습니까?-->
+				</p>
+				<div>
+					<button id="agreeModalBtn" class="custom dark-blue">확인</button>
+					<button id="agreeCancelBtn" class="custom gray">취소</button>
+				</div>
+			</div>
+		</div>
+	</article>
+	<article class="modal" id="addCompanyModal">
+		<div class="modal-wrap">
+			<div class="modal-head">
+				<h2>실증수요기관 / 실증기업 신규 등록</h2>
+				<span class="close">
+					<img src="/resources/publish/images/close.svg" alt="">
+				</span>
+			</div>
+			<div class="modal-body">
+				<ul class="member-info mb-50">
+					<li>
+						<div class="input-box">
+							<p><span style="color:red;">*</span> 실증 종류</p>
+							<div class="select" id="newMemberList">
+								<input id="newMemberRoleInput" type="text" class="custom" value="전체보기" readonly="readonly" data-role="">
+								<ul class="select-dropdown">
+									<li data-role='1'>실증수요기관</li>
+									<li data-role='2'>실증기업</li>
+								</ul>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="input-box id-check">
+							<p><span style="color:red;">*</span> 실증기업 아이디</p>
+							<input id="addCompanyMemberId" type="text" class="custom" value="" placeholder="실증기업 아이디">
+							<button id="addCompanyMemberIsId"  class="btn sm dark-blue">중복확인</button>
+							<span id="addCompanyMemberError"  class="error" style="display: none;">이미 사용중인 아이디입니다.</span>
+							<input type="hidden" readonly id="addCompanyMemberIdCheck" value="">
+						</div>
+						<div class="input-box">
+							<p><span style="color:red;">*</span> 실증기업 이름</p>
+							<input id="addCompanyName" type="text" class="custom" value="" placeholder="실증기업 이름">
+						</div>
+					</li>
+					<li>
+						<div class="input-box">
+							<p><span style="color:red;">*</span> 비밀번호</p>
+							<input id="addCompanyPwd1" type="password" class="custom" value="" placeholder="비밀번호">
+						</div>
+						<div class="input-box" style="position:relative">
+							<p><span style="color:red;">*</span> 비밀번호 확인</p>
+							<input id="addCompanyPwd2" type="password" class="custom" value="" placeholder="비밀번호 확인">
+							<span id="addCompanyPwdCheck" class="error" style="position : absolute; width: 100%;text-align: right; left: 0; top:70px; font-size: 12px;color: #ff0000"></span>
+						</div>
+					</li>					
+					<li>
+						<div class="input-box">
+							<p>대표자 이름</p>
+							<input id="addCompanyPresidentName" type="text" class="custom" value=""  placeholder="대표자 이름" >
+						</div>
+						<div class="input-box">
+							<p><span style="color:red;">*</span> 대표 이메일 주소</p>
+							<input id="addCompanyEmail" type="text" class="custom" value="" placeholder="대표 이메일 주소">
+						</div>
+					</li>
+					<li>
+						<div class="input-box">
+							<p>사업자 등록번호</p>
+							<input id="addCompanyRegistNumber" type="text" class="custom" value="" placeholder="사업자 등록번호">
+						</div>
+						<div class="input-box">
+							<p>회사 전화번호</p>
+							<input id="addCompanyPhone" type="text" class="custom" value="" placeholder="회사 전화번호">
+						</div>
+					</li>
+					<li>
+						<div class="input-box">
+							<p>회사 주소</p>
+							<input id="addCompanyAddress" type="text" class="custom" value="" placeholder="회사 주소">
+						</div>
+						<div class="input-box">
+							<p>회사 홈페이지</p>
+							<input id="addCompanyUrl" type="text" class="custom" value="" placeholder="회사 홈페이지">
+						</div>
+					</li>
+					<!--<li class="line"></li>
+					<li>
+						<div class="input-box">
+							<p>등록된 센서 수</p>
+							<input type="text" class="custom" value="">
+						</div>
+					</li>-->
+				<!--	<li style="display: none;">
+						<div class="input-box">
+							<p>가입 신청 일자</p>
+							<input type="text" class="custom" value="">
+						</div>
+						<div class="input-box">
+							<p>승인 일자</p>
+							<input type="text" class="custom" value="">
+						</div>
+					</li>-->
+				</ul>
+				<div class="button-container">
+					<button id="addCompanyProcBtn" class="custom dark-blue">등록</button>
+					<button id="addCompanyCancelBtn" class="custom">취소</button>
+				</div>
+			</div>
+		</div>
+	</article>
+	<article class="modal" id="addMemberModal">
+		<div class="modal-wrap">
+			<div class="modal-head">
+				<h2>회원 신규 등록</h2>
+				<span class="close">
+					<img src="/resources/publish/images/close.svg" alt="">
+				</span>
+			</div>
+			<div class="modal-body">
+				<ul class="member-info mb-50">
+					<li>
+						<div class="input-box id-check">
+							<p><span style="color:red;">*</span> 회원 아이디</p>
+							<input  type="text" id="addMemberId" class="custom" value="" placeholder="아이디">
+							<button type="button" id="memberIdCheckBtn" class="btn sm dark-blue">중복확인</button>
+							<span class="error" id="addMemberIdError" style="display: none;">이미 사용중인 아이디입니다.</span>
+							<input type="hidden" id="addMemberCheck" readonly value="">
+						</div>
+					</li>
+					<li>
+						<div class="input-box">
+							<p><span style="color:red;">*</span> 회원 이름</p>
+							<input type="text" id="addMemberName" class="custom" value="" placeholder="회원 이름">
+						</div>
+						<div class="input-box">
+							<p><span style="color:red;">*</span> 비밀번호</p>
+							<input type="password" id="addMemberPwd" class="custom" value="" placeholder="비밀번호">
+						</div>
+					</li>
+					<li>
+						<div class="input-box">
+							<p>연락처</p>
+							<input type="text" id="addMemberTel" class="custom" value="" placeholder="연락처 01012345678">
+						</div>
+						<div class="input-box">
+							<p>이메일 주소</p>
+							<input type="text" id="addMemberEmail" class="custom" value="" placeholder="이메일 주소">
+						</div>
+					</li>
+					<li>
+						<div class="input-box">
+							<p>부서</p>
+							<input type="text" id="addMemberDeptName" class="custom" value="" placeholder="부서">
+						</div>
+						<div class="input-box">
+							<p>직책</p>
+							<input type="text" id="addMemberRank" class="custom" value="" placeholder="직책">
+						</div>
+					</li>
+				</ul>
+				<div class="button-container">
+					<button type="button" id="addMemberProcBtn" class="custom dark-blue">등록</button>
+					<button type="button" id="addMemberCancelBtn" class="custom">취소</button>
+				</div>
+			</div>
+		</div>
+	</article>
+	<article class="modal" id="modifyModal">
+		<div class="modal-wrap">
+			<div class="modal-head">
+				<h2>회원 정보 수정</h2>
+				<span class="close">
+					<img src="/resources/publish/images/close.svg" alt="">
+				</span>
+			</div>
+			<div class="modal-body">
+				<ul class="member-info mb-50">
+					<li>
+						<div class="input-box">
+							<p>회원 아이디</p>
+							<input type="text" id="memberModId" class="custom" value="" readonly>
+						</div>
+						<div class="input-box">
+							<p><span style="color:red;">*</span> 회원 이름</p>
+							<input type="text" id="memberModName" class="custom" value="" placeholder="회원 이름">
+						</div>
+					</li>
+					<li>
+						<div class="input-box">
+							<p>연락처</p>
+							<input type="text" id="memberModTel" class="custom" value="" placeholder="연락처 01012345678">
+						</div>
+						<div class="input-box">
+							<p>이메일 주소</p>
+							<input type="text" id="memberModEmail" class="custom" value="" placeholder="이메일 주소">
+						</div>
+					</li>
+					<li>
+						<div class="input-box">
+							<p>부서</p>
+							<input type="text" id="memberModDeptName" class="custom" value="" placeholder="부서">
+						</div>
+						<div class="input-box">
+							<p>직책</p>
+							<input type="text" id="memberModRank" class="custom" value="" placeholder="직책">
+						</div>
+					</li>
+				</ul>
+				<div class="button-container">
+					<button id="memberModProcBtn" class="custom dark-blue">저장</button>
+					<button id="memberModCancelBtn" class="custom">취소</button>
+					<input type="hidden" id="memberModIdx" value="">
+				</div>
+			</div>
+		</div>
+	</article>
+	<article class="modal" id="pwdModal">
+		<div class="modal-wrap">
+			<div class="modal-head">
+				<h2>비밀번호 변경</h2>
+				<span class="close">
+					<img src="/resources/publish/images/close.svg" alt="">
+				</span>
+			</div>
+			<div class="modal-body">
+				<ul class="member-info mb-50">
+					<!--<li>
+						<div class="input-box">
+							<p>기존 비밀번호</p>
+							<input id="" type="password" class="custom" value="">
+						</div>
+					</li>-->
+					<li>
+						<div class="input-box">
+							<p>새 비밀번호</p>
+							<input id="modPwd1" type="password" class="custom" value="">
+						</div>
+					</li>
+					<li>
+						<div class="input-box id-check">
+							<p>새 비밀번호 확인</p>
+							<input id="modPwd2" type="password" class="custom" value="">
+							<span  id="modPwdError" class="error" style="display: block;"></span>
+						</div>
+					</li>
+				</ul>
+				<div class="button-container">
+					<button id="modPwdProcBtn" class="custom dark-blue">저장</button>
+					<button id="modPwdCancelBtn" class="custom">취소</button>
+					<input type="hidden" id="modPwdMemberIdx" value="" readonly>
+				</div>
+			</div>
+		</div>
+	</article>
+	<article class="modal" id="deleteModal">
+		<div class="modal-wrap">
+			<div class="modal-head">
+				<h2>회원 삭제</h2>
+				<span class="close">
+					<img src="/resources/publish/images/close.svg" alt="">
+				</span>
+			</div>
+			<div class="modal-body">
+				<p class="mb-30" id="memberDelSpan">
+					<!--<span>"LG전자"</span>을(를)<br>
+					<b>삭제</b>하시겠습니까?-->
+				</p>
+				<div>
+					<button id="memberDelProcBtn" class="custom dark-blue">확인</button>
+					<button id="memberDelProcCancelBtn" class="custom gray">취소</button>
+				</div>
+			</div>
+		</div>
+	</article>
+
+	<th:block th:replace="fragments/footer-manager :: footerFragmentManager"></th:block>        
+
+</body>
+	<th:block th:replace="fragments/script :: scriptFragment('true')"></th:block>
+		<script src="https://cdn.jsdelivr.net/npm/simple-notify@0.5.4/dist/simple-notify.min.js"></script>
+	<script th:src="@{/resources/ics/common/js/regex.js}"></script>
+	<script th:src="@{/resources/ics/common/js/string.js}"></script>
+	<script th:src="@{/resources/ics/manager/js/managerUser.js}"></script>
+
+</html>

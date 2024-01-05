@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ics.auth.AuthMapper">
+
+	<select id="findByLoginId" parameterType="String" resultType="ics.auth.UserVO">
+	<![CDATA[
+	select 
+	    member.company_idx as 'companyIdx'
+	  , company.company_name as 'companyName'
+	  , member.idx
+	  , member.member_id as 'id'
+	  , member.member_name as 'name'
+	  , member.member_tel as 'tel'
+	  , member.member_email as 'email'
+	  , member.member_pw as 'password'
+	  , company.company_role as 'auth_id'
+	  , case when company.approval_status = 'Y' then 1 else 2 end 'status'
+	from 
+		member 
+	inner join company 
+		on company.idx = member.company_idx 
+	where 
+			member.member_id = #{username} 
+		and member.use_yn = 'Y'
+	]]>
+	</select>
+
+	<!-- 
+	<select id="findByLoginId" resultType="ics.auth.UserVO">
+	<![CDATA[
+		select 
+			  id
+			, password 
+			, name
+			, tel
+			, email 
+			, auth_id
+			, status
+			, push_yn 
+		from 
+			member
+		inner join member_auth
+			on member_auth.member_id = member.id
+		and member.use_yn = 'Y'
+		and member_id = #{username}
+	]]>
+	</select>
+ -->
+</mapper>

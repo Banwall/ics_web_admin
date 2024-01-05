@@ -1,0 +1,59 @@
+@import 'variables', 'mixin';
+
+#sensordata {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 773px 660px;
+  gap: 10px;
+}
+
+.chart-wrap {
+  padding: 10px;
+}
+
+.search-container {
+  @include flex;
+  padding: 10px;
+  margin-bottom: 20px;
+  .search-option {
+    @include flex;
+    input,
+    .select {
+      width: 289px;
+    }
+    button.custom {
+      height: 40px;
+      padding: 0 20px;
+    }
+    span {
+      padding: 0 10px;
+    }
+  }
+}
+
+.data-table {
+  padding-left: 10px;
+  .table-wrap {
+    overflow-y: scroll;
+    max-height: 568px;
+  }
+  table {
+    width: 100%;
+    text-align: left;
+    text-indent: 30px;
+    tr {
+      td,
+      th {
+        border: 1px solid rgba($color: $gray, $alpha: 0.2);
+        line-height: 48px;
+        @include ellipse;
+      }
+      th {
+        background: $light-gray;
+        font-size: $fl;
+        font-weight: $medium;
+        color: $navy;
+      }
+    }
+  }
+}

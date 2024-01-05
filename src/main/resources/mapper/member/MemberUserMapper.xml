@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ics.member.user.MemberUserMapper">
+
+	<select id="getCompanyInfo" parameterType="Integer" resultType="ics.member.user.dto.MemberCompanyDTO">
+	<![CDATA[
+	select
+		  company.idx as 'companyIdx'
+		, company.company_name as 'companyName'
+		, company.company_email as 'companyEmail'
+		, company.company_phone as 'companyPhone'
+		, company.company_address as 'companyAddress'
+		, company.company_url as 'companyUrl'
+		, company.company_role as 'companyRole'
+		, ifnull(company.president_name,'') as 'companyPresidentName'
+		, date_format(company.create_date, '%Y-%m-%d %H:%i:%s') as 'companyCreateDate'
+		, ifnull(company.company_regist_number, '') as 'companyRegistNumber'
+	from
+		company
+	where
+		company.idx = #{companyIdx}
+	]]>
+	</select>
+
+	<select id="getCompanyInfos" parameterType="Integer" resultType="ics.member.user.dto.MemberCompanyDTO">
+	<![CDATA[
+		SELECT
+			company.idx as 'companyIdx'
+			 , company.company_name as 'companyName'
+			 , company.company_email as 'companyEmail'
+			 , company.company_phone as 'companyPhone'
+			 , company.company_address as 'companyAddress'
+			 , company.company_url as 'companyUrl'
+			 , company.company_role as 'companyRole'
+			 , ifnull(company.president_name,'') as 'companyPresidentName'
+			 , date_format(company.create_date, '%Y-%m-%d %H:%i:%s') as 'companyCreateDate'
+			 , ifnull(company.company_regist_number, '') as 'companyRegistNumber'
+			 , s.station_name AS 'stationName'
+		FROM company
+		INNER JOIN company_station cs
+			ON company.idx = cs.company_idx
+		INNER JOIN station s
+			ON s.station_number = cs.station_number
+		WHERE company.idx = #{companyIdx}
+		]]>
+	</select>
+	
+	<select id="getMemberTotalCount" parameterType="ics.member.user.dto.MemberListReqDTO" resultType="Integer">
+	<![CDATA[
+		select count(*) as 'cnt' from member where member.company_idx = #{companyIdx}
+			and member.use_yn = 'Y'
+			and member.member_approval_status = 'Y'
+	]]>
+	</select>
+	
+	<select id="getMemberList" parameterType="ics.member.user.dto.MemberListReqDTO" resultType="ics.member.user.dto.MemberListResDTO">
+	<![CDATA[
+		select
+			*
+		from
+			(
+				select
+					  @rownum:=@rownum+1 as row_num
+					, member.idx as 'memberIdx'
+					, member.member_id as 'memberId'
+					, ifnull(member.dept_name, '') as 'memberDeptName'
+					, member.member_name as 'memberName'
+					, ifnull(member.rank, '') as 'memberRank'
+					, date_format(member.create_date, '%Y-%m-%d %H:%i:%s') as 'memberCreateDate'
+					, ifnull(member.member_email, '') as 'memberEmail'
+					, ifnull(member.member_tel, '') as 'memberTel'
+				from
+					( SELECT @ROWNUM := 0) r, member
+				where
+						member.company_idx = #{companyIdx}
+					and member.use_yn = 'Y'
+					and member.member_approval_status = 'Y'
+				order by 
+					member.idx asc
+			) t
+		where row_num between #{startNum} and #{endNum} 
+	]]>
+	</select>
+
+	<update id="companyModProc" parameterType="ics.member.user.dto.MemberCompanyModReqDTO">
+	<![CDATA[
+		update
+			company
+		set
+			  company_name = #{companyName}
+			, company_email = #{companyEmail}
+			, company_phone = #{companyPhone}
+			, company_address = #{companyAddress}
+			, company_url = #{companyUrl}
+			, company_regist_number = #{companyRegistNumber}
+			, president_name = #{companyPresidentName}
+			, modifier = #{modifier}
+			, modify_date = now()
+		where
+			company.idx = #{companyIdx}
+	]]>
+	</update>	
+
+	<select id="getStationList" resultType="ics.member.user.dto.StationListResDTO">
+	<![CDATA[
+		select
+		  station.idx as 'stationIdx'
+		, station.station_name as 'stationName'
+		from 
+			station
+	]]>
+	</select>		
+	
+</mapper>

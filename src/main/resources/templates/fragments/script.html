@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<th:block th:fragment="scriptFragment(useScriptCsrf)">
+	<script th:src="@{/resources/ics/assets/jquery-ui/external/jquery/jquery.js}"></script>
+	<script th:src="@{/resources/ics/common/js/common.js}"></script>
+	
+	<th:block th:if="${useScriptCsrf=='true'}">
+		<script th:src="@{/resources/ics/common/js/csrf.js}"></script>
+	</th:block>
+</th:block>
+<th:block layout:fragment="script"></th:block>
+</html>

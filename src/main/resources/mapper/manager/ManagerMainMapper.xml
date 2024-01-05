@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ics.manager.main.ManagerMainMapper">
+
+	<select id="getSensorUseApprovalCount" resultType="Integer">
+	<![CDATA[
+	select count(*) from sensor where company_idx in 
+	(select idx from company where  company.company_role in ('ROLE_O', 'ROLE_M') and company.use_yn ='Y') 
+	and sensor.use_yn = 'Y'
+	and sensor.sensor_approval_status = 'Y'
+	]]>
+	</select>
+	
+	<select id="getCompanyCount" resultType="Integer">
+	<![CDATA[
+		select count(*) from company where company.company_role in ('ROLE_O', 'ROLE_M') and company.use_yn ='Y'
+	]]>
+	</select>
+	
+	<select id="getServiceCount" resultType="Integer">
+	<![CDATA[
+		select count(*) from route where route.route_number not in ('00000')
+	]]>
+	</select>
+	
+	<!-- <select id="getSensorHourStatusCount" parameterType="ics.manager.main.dto.StatusRateTimeDTO"  resultType="Integer">
+	<![CDATA[
+		select count(*) as cnt
+		from
+		(select sensor.receive_date from sensor where company_idx in 
+			(select idx from company where  company.company_role in ('ROLE_O', 'ROLE_M') and company.use_yn ='Y') 
+			and sensor.use_yn = 'Y'
+			and sensor.sensor_approval_status = 'Y'	
+			and (
+				1=1
+				and 
+				sensor.receive_date is not null
+				or
+				sensor.receive_date != ''
+			)
+		)a
+		 where
+			 receive_date BETWEEN #{startTime} and #{endTime} 
+	]]>
+	</select> -->
+	<select id="getSensorHourStatusCount" parameterType="ics.manager.main.dto.StatusRateTimeDTO"  resultType="Integer">
+	<![CDATA[
+		select count(*) as cnt
+		from
+		(select sensor.receive_date from sensor where company_idx in 
+			(select idx from company where  company.company_role in ('ROLE_O', 'ROLE_M') and company.use_yn ='Y') 
+			and sensor.use_yn = 'Y'
+			and sensor.sensor_approval_status = 'Y'	
+			and sensor.receive_date is not null
+			
+		)a
+		 where
+			 receive_date BETWEEN #{startTime} and #{endTime} 
+	]]>
+	</select>
+	
+	<select id="getSensorWarnLog" parameterType="String" resultType="ics.manager.main.dto.SensorWarnLogResDTO">
+	<![CDATA[
+		SELECT
+			REGEXP_SUBSTR(a.message, '[0-9]+') AS 'sensorLogValue'
+		,	date_format(a.create_date, '%Y-%m-%d %H:%i:%s') AS 'sensorLogCreateDate'
+		,	s.location_description 'sensorLocationDescription'
+		FROM alarm a
+		INNER JOIN sensor s
+			ON a.sensor_idx = s.idx
+		WHERE a.create_date BETWEEN #{param1} AND #{param2}
+		ORDER BY a.create_date DESC
+		LIMIT 30
+	]]>
+	</select>
+	
+	<select id="getSensorTypeCnt" resultType="ics.manager.main.dto.SensorTypeCntResDTO">
+	<![CDATA[
+		SELECT
+		    sensor_type_code AS 'sensorTypeCode'
+		,	sensor_type_name AS 'sensorTypeName'
+		,	cnt AS 'sensorLogCnt'
+		FROM sensor_type_cnt
+	]]>
+	</select>
+	
+	<select id="getSensorLogLimit" resultType="ics.manager.main.dto.SensorRealLogResDTO">
+	<![CDATA[
+		SELECT
+			date_format(sensor_log.create_date, '%Y-%m-%d %H:%i:%s') as 'sensorLogCreateDate'
+			, sensor_log.value as 'sensorLogValue'
+			, a.threshold as 'sensorThresHold'
+			, a.location_description as 'sensorLocationDescription'
+			, a.idx as 'sensorIdx'
+			, case when sensor_log.value >= a.threshold then 1 else 2 end 'sensorLogType'
+			, sensor_type.sensor_type_code as 'sensorTypeCode'
+			, sensor_type.sensor_type_code as 'sensorTypeName'
+		FROM
+			sensor_log
+				LEFT JOIN (
+				SELECT
+					sensor.idx, sensor.threshold, sensor.location_description, sensor.sensor_type_idx
+				FROM sensor
+				WHERE
+					sensor.use_yn = 'Y'
+				  AND sensor.sensor_approval_status = 'Y') a
+						  ON a.idx = sensor_log.sensor_idx
+				LEFT JOIN sensor_type
+						  ON sensor_type.idx = a.sensor_type_idx
+		WHERE
+			date_format(sensor_log.create_date, '%Y-%m-%d') = date_format(now(),  '%Y-%m-%d')
+		ORDER BY
+			sensor_log.idx DESC
+		LIMIT 30
+	]]>
+	</select>
+	
+	<select id="getSensorCurrentValue" parameterType="Integer" resultType="ics.manager.main.dto.SensorCurrentValueResDTO">
+	<![CDATA[
+	select
+		enclosure.name as 'enclosureName'
+		, sensor.value as 'sensorValue'
+		, enclosure.location as 'enclosureLocation'
+	from 
+		sensor 
+	inner join enclosure 
+		on sensor.enclosure_idx = enclosure.idx 	
+	where 
+			sensor.sensor_type_idx = #{sensorTypeIdx}
+		and sensor.sensor_approval_status ='Y'
+		and sensor.use_yn = 'Y'
+	order by
+		enclosure.idx asc, seq asc
+	]]>
+	</select>
+	
+	<select id="getSensorRealTime" parameterType="ics.manager.main.dto.SensorRealTimeDTO" resultType="ics.manager.main.dto.SensorRealTimeResDTO">
+	<![CDATA[
+	select 
+		value as 'sensorValue'
+		, sensor_idx as 'sensorIdx'
+		, date_format(sensor_log.create_date, '%y-%m-%d %H:%i:%s')  as 'createDate'
+	from 
+		sensor_log
+	where
+		date_format(sensor_log.create_date, '%Y-%m-%d') = date_format(now(),  '%Y-%m-%d')
+		and sensor_log.sensor_idx = (select
+			sensor.idx 
+		from 
+			sensor 
+		where
+			sensor.use_yn = 'Y'
+			and sensor_approval_status='Y'
+			and sensor.enclosure_idx = #{enclosureIdx}
+			and sensor.sensor_type_idx = #{sensorTypeIdx}
+			)
+			
+	order by idx desc
+	limit 30
+	]]>
+	</select>
+	
+	<select id="getSensorDataOfEnclosure" parameterType="Integer" resultType="ics.manager.main.dto.SensorDataResDTO">
+	<![CDATA[
+	select
+		sensor.idx as 'sensorIdx'
+		, sensor_type.sensor_type_code as 'sensorTypeCode'
+		, sensor_type.sensor_type_name as 'sensorTypeName'
+		,CASE
+			WHEN sensor.receive_date >= DATE_SUB(NOW(), INTERVAL 1 HOUR) THEN sensor.value
+			ELSE ''
+		END as 'sensorValue'
+	from sensor
+	inner join sensor_type
+		on sensor_type.idx = sensor.sensor_type_idx 
+	where
+		sensor.use_yn = 'Y'
+		and sensor_approval_status='Y'
+		and sensor.enclosure_idx = #{enclosureIdx}
+	]]>
+	</select>
+	
+	<select id="getSensorWeek" parameterType="ics.manager.main.dto.SensorWeekDTO" resultType="ics.manager.main.dto.SensorWeekResDTO">
+	<![CDATA[
+	select
+		sensorCreateDate
+		, sum(sensorLogValue) as 'sensorLogValue'
+		, count(sensorLogValue) as 'sensorLogCnt'
+	from
+	(
+	select 
+		ifnull(sensor_log.value, 0) as 'sensorLogValue'
+		, date_format(sensor_log.create_date, '%Y-%m-%d') as 'sensorCreateDate'
+	from 
+		sensor_log
+	where
+		date_format(sensor_log.create_date, '%Y-%m-%d') BETWEEN #{startDay} and #{endDay}
+		and sensor_idx in(
+					select 
+						idx 
+					from 
+						sensor
+					where 
+						sensor_approval_status = 'Y'
+						and use_yn = 'Y'
+						and sensor_type_idx = #{sensorTypeIdx})
+	)t
+	group by sensorCreateDate
+	]]>
+	</select>
+	
+	<select id="getSensorInfoList" parameterType="String" resultType="ics.manager.main.dto.SensorInfoListResDTO">
+	<![CDATA[
+	select
+		  date_format(sensor.sensor_approval_date, '%Y-%m-%d %H:%i') as 'sensorApprovalDate'
+		, sensor.sensor_id as 'sensorId'
+		, sensor_type.sensor_type_name as 'sensorTypeName'
+		, sensor_type.sensor_type_code as 'sensorTypeCode'
+		, sensor.location_description as 'sensorLocationDescription'
+		, company.company_name as 'companyName'
+		, company.company_role  as 'companyRole'
+		, date_format(sensor.request_approval_date, '%Y-%m-%d %H:%i') as 'requestApprovalDate'
+	from 
+		sensor 
+	inner join sensor_type
+		on sensor_type.idx = sensor.sensor_type_idx 
+	inner join company
+		on company.idx = sensor.company_idx
+	where 
+			sensor.sensor_id= #{sensorId}
+		and sensor.use_yn = 'Y'
+		and sensor.sensor_approval_status = 'Y'
+	]]>
+	</select>
+	
+	<select id="getUserCount"  resultType="Integer">
+	<![CDATA[
+		select count(*) from(
+		select count(idx) from user_log
+		where
+			use_yn = 'Y'
+			and 
+			date_format(create_date, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d')
+		group by user_token) t 
+	]]>
+	</select>
+	
+</mapper>

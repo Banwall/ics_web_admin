@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5" >
+<head>
+	<th:block th:replace="fragments/meta :: metaFragment(title='ICT-Login', useMetaCsrf='true')"></th:block>
+	<th:block th:replace="fragments/style :: styleFragment"></th:block>
+	<!-- 개별css -->
+	<link rel="stylesheet" href="/resources/publish/css/login.css">
+	<!-- CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-notify@0.5.4/dist/simple-notify.min.css" />
+
+	<style>
+		.selectBox {
+			position: relative;
+		}
+
+		#selectManager {
+			width: 315px;
+			height: 35px;
+			font-size: 13px;
+		}
+
+		.overSelect {
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 0;
+		}
+
+		#checkboxes {
+			display: none;
+			border: 1px #dadada solid;
+			position: absolute;
+			z-index: 1;
+			height: 105px;
+			width: 315px;
+			overflow: auto;
+			background-color: white;
+		}
+
+		#checkboxes label {
+			display: block;
+		}
+
+		#checkboxes label:hover {
+			background-color: #1e90ff;
+		}
+	</style>
+</head>
+
+<body>
+	<th:block th:replace="fragments/loding :: loadingFragment"></th:block>
+	<div class="header"></div>
+	<div class="main">
+		<h1><img src="/resources/publish/images/logo-big.png" alt=""></h1>
+		<div class="slide-container">
+			<section class="login">
+				<div class="wrap" style="position: relative;">
+					<h2 class="company-logo">
+						<img src="/resources/publish/images/login-logo.png" alt="">
+					</h2>
+					<button type="button" id="signupManualDownBtn" class="custom dark-blue" style="position: absolute; right:0; top: 0">회원가입 메뉴얼</button>
+					<form method="POST" th:action="@{/auth/login/form}" id="loginForm">
+						<div class="login-form">
+							<div class="id">
+								<input type="text" name="username" class="custom" placeholder="아이디 또는 이메일">
+								<span id="saveId"><svg xmlns="http://www.w3.org/2000/svg" width="12.4" height="15.2"
+										viewBox="0 0 12.4 15.2">
+										<g id="저장_클릭" data-name="저장 클릭" transform="translate(-974.188 215.317)">
+											<path id="패스_154" data-name="패스 154"
+												d="M986.485-207.668a2.216,2.216,0,0,0-.084-.606,1.885,1.885,0,0,0-1.767-1.334c-.115,0-.228,0-.347,0h-.138v-.145c0-.18,0-.361,0-.541,0-.4,0-.81-.006-1.215a3.8,3.8,0,0,0-.731-2.209,3.584,3.584,0,0,0-2.856-1.493,3.592,3.592,0,0,0-2.859,1.092,3.782,3.782,0,0,0-1.064,2.616c-.012.431-.009.853-.006,1.3,0,.187,0,.38,0,.573h-.112c-.1,0-.2,0-.29,0h-.018a2.514,2.514,0,0,0-.4.041,1.912,1.912,0,0,0-1.523,1.921c0,1.86,0,3.743,0,5.5a2.022,2.022,0,0,0,.034.39,1.9,1.9,0,0,0,.672,1.132,2.014,2.014,0,0,0,1.275.427h3.286l4.963,0a2.126,2.126,0,0,0,.4-.034,1.893,1.893,0,0,0,1.134-.67,2.009,2.009,0,0,0,.43-1.274C986.491-204.231,986.491-205.94,986.485-207.668Zm-1,5.483a.9.9,0,0,1-.964.963h-8.29a.886.886,0,0,1-.913-.695,1.153,1.153,0,0,1-.022-.254c0-2,0-3.8,0-5.5a.9.9,0,0,1,.957-.959h8.276a.9.9,0,0,1,.957.959C985.485-205.927,985.485-204.133,985.484-202.185Zm-2.323-8.416c0,.225,0,.446,0,.679q0,.141,0,.285h-5.541v0a.241.241,0,0,1,0-.04c0-.185,0-.373,0-.555,0-.421-.005-.855.008-1.282a2.676,2.676,0,0,1,1.045-2.152,2.726,2.726,0,0,1,2.823-.345,2.54,2.54,0,0,1,1.631,2.173,6.476,6.476,0,0,1,.038.9C983.16-210.831,983.159-210.715,983.161-210.6Z"
+												transform="translate(0 0)" fill="#7f7f7f" stroke="#7f7f7f" stroke-width="0.2" />
+											<path id="패스_155" data-name="패스 155"
+												d="M1161.022,88.391a1.006,1.006,0,0,0-.874.725.99.99,0,0,0,.355,1.078.2.2,0,0,1,.092.192c0,.17,0,.343,0,.51q0,.1,0,.2v.724a.518.518,0,0,0,.185.419.5.5,0,0,0,.326.126.535.535,0,0,0,.22-.05.5.5,0,0,0,.306-.489c0-.457,0-.949,0-1.449a.193.193,0,0,1,.088-.18,1.012,1.012,0,0,0,.276-1.3A.975.975,0,0,0,1161.022,88.391Z"
+												transform="translate(-180.723 -295.338)" fill="#7f7f7f" stroke="#7f7f7f"
+												stroke-width="0.2" />
+										</g>
+									</svg></span>
+							</div>
+							<div class="password">
+								<input type="password" name="password" class="custom" placeholder="비밀번호">
+								<span>
+									<svg xmlns="http://www.w3.org/2000/svg" width="15" height="10.818" viewBox="0 0 15 10.818">
+										<g id="표시" transform="translate(-1483.273 56.333)">
+											<path id="패스_152" data-name="패스 152"
+												d="M1498.138-51.51l-.022-.046a9.254,9.254,0,0,0-.713-1.3,7.907,7.907,0,0,0-6.768-3.475c-.1.009-.213.017-.332.025a7.886,7.886,0,0,0-.961.1,7.8,7.8,0,0,0-5.939,4.687,1.433,1.433,0,0,0,0,1.184,7.8,7.8,0,0,0,3.231,3.694,7.778,7.778,0,0,0,4.036,1.123,8.707,8.707,0,0,0,1.523-.137,7.7,7.7,0,0,0,5.951-4.689A1.347,1.347,0,0,0,1498.138-51.51Zm-.954.809a7.136,7.136,0,0,1-2.011,2.646,7.115,7.115,0,0,1-3.026,1.375,4.9,4.9,0,0,1-.574.084c-.182.016-.368.025-.564.034l-.283.014h0a6.829,6.829,0,0,1-5.872-3.221,6.19,6.19,0,0,1-.365-.672c-.042-.086-.085-.174-.13-.26a.487.487,0,0,1,0-.443,6.7,6.7,0,0,1,5.033-4.02,6.915,6.915,0,0,1,5.177.944,6.8,6.8,0,0,1,2.616,3.063A.528.528,0,0,1,1497.184-50.7Z"
+												transform="translate(0)" fill="#7f7f7f" />
+											<path id="패스_153" data-name="패스 153"
+												d="M1651.588,37.894a.514.514,0,0,0-.4.37.487.487,0,0,0,.105.479.585.585,0,0,0,.561.147,1.581,1.581,0,0,1,1.685.565,1.561,1.561,0,0,1,.207,1.751,1.605,1.605,0,0,1-1.474.945h0l-.091-.007a1.63,1.63,0,0,1-.19-.02,1.648,1.648,0,0,1-1.331-2.045.515.515,0,0,0-.369-.66.549.549,0,0,0-.129-.016.519.519,0,0,0-.5.421,2.68,2.68,0,1,0,4.969-.579A2.7,2.7,0,0,0,1651.588,37.894Z"
+												transform="translate(-161.483 -91.419)" fill="#7f7f7f" />
+										</g>
+									</svg>
+								</span>
+							</div>
+							<div class="switch mb-44">
+								<label class="switch-button">
+									<input type="checkbox" name="rememeber-me" id="rememeber-me">
+									<span class="onoff-switch"></span>
+								</label>
+								<span>로그인 상태 유지</span>
+							</div>
+							<div class="mb-15">
+								<button type="button" class="btn dark-blue" id="loginBtn">로그인</button>
+							</div>
+							<div>
+								<button type="button" class="btn light-blue" id="join">회원사 회원가입</button>
+							</div>	
+						</div>
+					</form>
+					<th:block th:if="${errorMsg} != null">
+						<div class="" id="errorMsg" th:text="${errorMsg}" style="display: none;"></div>
+					</th:block>
+				</div>
+			</section>
+			<section class="join">
+				<h2>회원가입</h2>
+				<div class="mb-25">
+					<div class="flex-between">
+						<div class="input-box">
+							<p><span style="color:red;">*</span> 회원사 종류</p>
+							<div class="select">
+								<input id="roleInput" type="text" class="custom" placeholder="선택하세요" readonly data-role="">
+								<ul class="select-dropdown">
+									<li data-role='1'>실증수요기관</li>
+									<li data-role='2'>실증기업</li>
+								</ul>
+							</div>
+						</div>
+						<div class="input-box">
+							<p><span style="color:red;">*</span> 회원사 이름</p>
+							<input id="companyName" type="text" class="custom" placeholder="회원사 이름을 입력하세요">
+						</div>
+						<div class="input-box" style="margin-bottom: 20px !important;">
+							<div class="selectBox" onclick="showCheckboxes()">
+								<p><label for="selectManager"><span style="color:red;">*</span> 운영사 선택</label></p>
+								<select id="selectManager" name="selectManager">
+									<option value="">--운영사 선택--</option>
+								</select>
+								<div class="overSelect"></div>
+							</div>
+
+							<div id="checkboxes">
+								<label th:each="station : ${stationList}" th:for="${station.stationNumber}">
+									<input class="stationChk" type="checkbox" th:id="${station.stationNumber}" th:value="${station.stationNumber}">
+									[[${station.stationName}]]
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="flex-between">
+						<div class="input-box id-check">
+							<p><span style="color:red;">*</span> 회원사 아이디</p>
+							<input id="memberId" type="text" class="custom" placeholder="회원사 아이디를 입력하세요">
+							<button id="isIdBtn" class="btn sm dark-blue">중복확인</button>
+							<span id="isIdError" class="error" style="display: none;">이미 사용중인 아이디입니다.</span>
+							<input id="memberIdChk" type="hidden" value="" readonly>
+						</div>
+						<div class="input-box">
+							<p><span style="color:red;">*</span> 비밀번호</p>
+							<input id="memberPwd1" type="password" class="custom" placeholder="비밀번호를 입력하세요">
+						</div>
+						<div class="input-box mb-20" style="position:relative">
+							<p><span style="color:red;">*</span> 비밀번호 확인</p>
+							<input id="memberPwd2" type="password" class="custom" placeholder="비밀번호를 입력하세요">
+							<span id="pwdCheck" class="error" style="width:100%; position : absolute; text-align: right; right: 0; top:73px; font-size: 12px; color: #ff0000"></span>
+						</div>
+					</div>
+					<div class="flex-between">
+						<div class="input-box">
+							<p>대표자 이름</p>
+							<input id="companyPresidentName" type="text" class="custom" placeholder="대표자 이름을 입력하세요">
+						</div>
+						<div class="input-box">
+							<p><span style="color:red;">*</span> 회원사 연락 이메일</p>
+							<input id="companyEmail" type="text" class="custom" placeholder="이메일 주소를 입력하세요">
+						</div>
+						<div class="input-box mb-20">
+							<p>사업자등록번호</p>
+							<input id="companyRegistNumber" type="text" class="custom" placeholder="사업자등록번호를 입력하세요">
+						</div>
+					</div>
+					<div class="flex-between">
+						<div class="input-box">
+							<p>회사 전화번호</p>
+							<input id="companyPhone" type="text" class="custom" placeholder="회사 전화번호를 입력하세요">
+						</div>
+						<div class="input-box">
+							<p>회사 주소</p>
+							<input id="companyAddress" type="text" class="custom" placeholder="회사 주소를 입력하세요">
+						</div>
+						<div class="input-box mb-20">
+							<p>회사 홈페이지</p>
+							<input id="companyUrl" type="text" class="custom" placeholder="회사 홈페이지 주소를 입력하세요">
+						</div>
+					</div>
+				</div>
+				<div class="notice mb-13">
+					<h4>※ 가입을 원하는 회원사 및 회원은 아래 항목에 동의한것으로 판단합니다. 신중하게 선택하여 가입하시기 바랍니다.</h4>
+					<p>· 회원사는 AIoT 실증지원 플랫폼을 사용함에 있어 수집된 센서에 대한 정보를 관리사와 공유함에 동의한다.</p>
+					<p>· 수집된 정보는 경쟁사 또는 타 회원에게 제공하지 않고, 회원사에게만 제공하며, 관리사의 모니터링 용도로 사용함에 동의한다.</p>
+					<p>· 가입한 정보에 대한 개인정보 수집에 동의한다.</p>
+					<p>· 회원사(운영사) 및 회원사(운영사)에 소속된 회원은 플랫폼 보안 및 운영에 위배되는 어떠한 행위도 하지 않는다.</p>
+				</div>
+				<div class="mb-25" style="font-size: 12px; font-weight: 500;">
+					<input id="agreeChk" type="checkbox" class="mr-5" style="vertical-align: middle;"> 모든 항목에 동의합니다.
+				</div>
+				<div class="text-center">
+					<button id="companyJoinBtn" class="btn dark-blue">가입하기</button>
+				</div>
+			</section>
+		</div>
+	</div>
+	<div class="footer">
+		<address class="wrap">Copyright 2021-22 © koreasoft All rights reserved.</address>
+	</div>
+	
+	<article class="modal" id="memberJoinConfirmModal">
+        <div class="modal-wrap">
+            <div class="modal-head">
+                <h2>회원가입</h2>
+                <span class="close">
+                    <img src="/resources/publish/images/close.svg" alt="">
+                </span>
+            </div>
+            <div class="modal-body">
+                <p class="mb-30">
+					가입신청을 하시겠습니까?                   
+                </p>
+                <div>
+                    <button id="memberJoinProcBtn" class="custom dark-blue mr-20">확인</button>
+                    <button id="memberJoinProcCancelBtn" class="custom gray">취소</button>
+                </div>
+            </div>
+        </div>
+    </article>    
+	
+</body>
+	<th:block th:replace="fragments/script :: scriptFragment('true')"></th:block>
+	<script src="https://cdn.jsdelivr.net/npm/simple-notify@0.5.4/dist/simple-notify.min.js"></script>
+	<script th:src="@{/resources/ics/common/js/security.js}"></script>
+	<script th:src="@{/resources/ics/common/js/regex.js}"></script>
+	<script th:src="@{/resources/ics/common/js/cookie.js}"></script>
+	<script th:src="@{/resources/ics/common/js/string.js}"></script>
+	<script th:src="@{/resources/ics/auth/js/authLoginForm.js}"></script>
+
+	<script type="text/javascript" th:inline="javascript">
+		var expanded = false;
+
+		function showCheckboxes() {
+			var checkboxes = document.getElementById("checkboxes");
+			if (!expanded) {
+				checkboxes.style.display = "block";
+				expanded = true;
+			} else {
+				checkboxes.style.display = "none";
+				expanded = false;
+			}
+		}
+	</script>
+
+</html>

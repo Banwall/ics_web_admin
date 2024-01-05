@@ -1,0 +1,340 @@
+@import 'variables', 'mixin';
+
+.home {
+  display: grid;
+  grid-template-columns: 297px 797px 297px 297px;
+  grid-template-rows: 150px 208px 183px 281px 378px;
+  grid-template-areas:
+    'card0 card4 card4 card5'
+    'card1 card4 card4 card5'
+    'card2 card4 card4 card5'
+    'card3 card4 card4 card5'
+    'card6 card6 card7 card8';
+  gap: $ms;
+  > div {
+    @for $i from 0 to 9 {
+      &:nth-child(#{$i + 1}) {
+        grid-area: card#{$i};
+      }
+    }
+    h3 {
+      padding: $ms;
+      font-weight: $bold;
+      font-size: $fn;
+      margin-bottom: $ms;
+    }
+    .flex-between {
+      margin-bottom: $ms;
+      h3 {
+        margin-bottom: 0;
+      }
+    }
+  }
+  .text-list {
+    overflow-y: scroll;
+    height: calc(100% - 50px);
+    > li {
+      background: rgba($color: $light-gray, $alpha: 0.5);
+      padding: 5px 7px;
+      margin-bottom: 10px;
+      font-size: $fs;
+      &.error {
+        background: rgba($color: $red, $alpha: 0.1);
+        color: $red !important;
+        font-weight: $medium;
+        letter-spacing: -0.5px;
+      }
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+  .select {
+    width: 133px;
+  }
+  .today {
+    background: $light-blue;
+    border: 1px solid rgba($color: $dark-blue, $alpha: 0.2);
+    padding: 20px;
+    h3 {
+      font-size: $fl;
+      font-weight: $bold;
+      color: $navy;
+      margin-bottom: $mn;
+      padding: 0;
+      span {
+        font-size: $fn;
+      }
+    }
+    .today-data {
+      @include flex;
+      li {
+        width: 79px;
+        height: 71px;
+        border-radius: 10px;
+        background: $white;
+        text-align: center;
+        padding: 12px 0;
+        font-size: 20px;
+        font-weight: $medium;
+        color: $white;
+        h5 {
+          font-size: $fs;
+        }
+        &:nth-child(1) {
+          background: $navy;
+        }
+        &:nth-child(2) {
+          color: $navy;
+        }
+        &:nth-child(3) {
+          background: $blue;
+        }
+      }
+    }
+  }
+  .sensor-take {
+    > div {
+      width: 246px;
+      height: 128px;
+      margin: 0 auto;
+      .chart {
+        width: 110px;
+        height: 110px;
+        position: relative;
+        span {
+          position: absolute;
+          top: 34%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          font-size: 14px;
+          font-weight: $medium;
+          pointer-events: none;
+        }
+      }
+    }
+  }
+  .maps {
+    padding: 30px;
+    .map-img {
+      @include flex(center, center);
+      width: 1046px;
+      height: 584px;
+      position: relative;
+      img {
+        width: auto;
+        height: auto;
+        max-width: 100%;
+        max-height: 100%;
+      }
+    }
+    .category {
+      background: rgba($color: $gray, $alpha: 0.1);
+      padding: 10px;
+      border-radius: 10px;
+      @include flex;
+      > li {
+        align-items: center;
+        font-size: $fs;
+        font-weight: $medium;
+        color: $blue;
+        margin-right: 10px;
+        &:last-child {
+          margin-right: 0;
+          color: $red;
+        }
+        .sensor-icon,
+        .fire-icon {
+          position: static;
+        }
+      }
+    }
+    .sensor-icon {
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      background: rgba($color: $blue, $alpha: 0.3);
+      border-radius: 50%;
+      @include flex(center, center);
+      position: absolute;
+      cursor: pointer;
+      span {
+        content: '';
+        display: block;
+        background: $blue;
+        width: 60%;
+        height: 60%;
+        border-radius: 50%;
+        @include flex(center, center);
+      }
+      img {
+        width: 70%;
+        height: auto;
+      }
+    }
+    .fire-icon {
+      display: inline-block;
+      width: 15px;
+      height: 15px;
+      background: rgba($color: $red, $alpha: 0.3);
+      border-radius: 50%;
+      @include flex(center, center);
+      position: absolute;
+      cursor: pointer;
+      span {
+        content: '';
+        display: block;
+        background: $red;
+        width: 60%;
+        height: 60%;
+        border-radius: 50%;
+        @include flex(center, center);
+      }
+    }
+  }
+  .charts {
+    display: flex;
+    > div {
+      padding: 0 10px;
+      width: 322px;
+      .chart {
+        border-right: 1px solid rgba($color: $navy, $alpha: 0.1);
+        padding-right: 10px;
+        height: calc(100% - 50px);
+      }
+      &:first-child {
+        padding-left: 0;
+        width: 320px;
+      }
+      &:last-child {
+        padding-right: 0;
+        width: 445px;
+        .chart {
+          border-right: 0;
+        }
+      }
+    }
+    &.operator {
+      > div {
+        &:nth-child(1) {
+          width: 440px;
+        }
+        &:nth-child(2) {
+          width: 320px;
+        }
+        &:nth-child(3) {
+          width: 320px;
+        }
+      }
+      .toilet-img {
+        width: 100%;
+        height: 100%;
+        background: url('#{$root}/images/toilet.png') center center no-repeat;
+        background-size: contain;
+      }
+      .subway {
+        display: block;
+        width: 100%;
+        height: 100%;
+        background: url('#{$root}/images/subway.png') center center no-repeat;
+        background-size: contain;
+      }
+    }
+  }
+  .smartInfo {
+    background: $navy;
+    border: 0;
+    h3 {
+      color: $white;
+    }
+    .select {
+      input {
+        background: $navy;
+        color: $white;
+      }
+      .select-dropdown {
+        background: $navy;
+        color: $white;
+      }
+    }
+    h4 {
+      color: $white;
+      padding: 15px 20px 10px;
+      font-size: $fn;
+      font-weight: $medium;
+    }
+    .info-list {
+      padding: 0 10px;
+      > li {
+        width: 100%;
+        height: 45px;
+        border-radius: 5px;
+        @include flex(flex-start);
+        font-size: $fs;
+        border: 1px solid rgba($color: $white, $alpha: 0.2);
+        padding: 0 10px;
+        color: $white;
+        margin-bottom: 10px;
+
+        &.temp {
+          color: $green;
+          background: rgba($color: $white, $alpha: 0.1);
+          border: 0;
+          font-weight: $bold;
+        }
+        &.humi {
+          color: $blue;
+          background: rgba($color: $white, $alpha: 0.1);
+          border: 0;
+          font-weight: $bold;
+        }
+        &.dust {
+          background: rgba($color: $white, $alpha: 0.1);
+          border: 0;
+          font-weight: $medium;
+        }
+        img {
+          width: auto;
+          height: 25px;
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+  .cctv {
+    > div {
+      height: 144px;
+      margin-bottom: $ms;
+    }
+  }
+}
+
+.sensor-data {
+  text-align: left;
+  padding: 10px 20px;
+  border-radius: 5px;
+  background: $light-gray;
+  line-height: 24px;
+  table {
+    width: 100%;
+    th {
+      width: 20%;
+    }
+    .green {
+      color: $green;
+    }
+  }
+}
+
+#fireModal {
+  .sensor-data {
+    table {
+      th {
+        width: 30%;
+      }
+    }
+  }
+  h2 {
+    width: 400px;
+  }
+}
