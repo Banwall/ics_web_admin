@@ -389,6 +389,15 @@
   cursor: pointer;
 }
 
+#fire-btn1, #fire-btn2, #fire-btn3, #fire-btn4 {
+  width: 80px;
+  background: transparent;
+}
+
+#fire-btn1 span, #fire-btn2 span, #fire-btn3 span, #fire-btn4 span {
+  width: 0;
+}
+
 .home .maps .fire-icon span {
   content: '';
   display: block;
