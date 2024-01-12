@@ -143,7 +143,7 @@
 	from 
 		sensor_log
 	where
-		date_format(sensor_log.create_date, '%Y-%m-%d') = date_format(now(),  '%Y-%m-%d')
+		sensor_log.create_date BETWEEN DATE_FORMAT(NOW(),  '%Y-%m-%d 00:00:00') AND NOW()
 		and sensor_log.sensor_idx = (select
 			sensor.idx 
 		from 
